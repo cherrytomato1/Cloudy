@@ -9,8 +9,8 @@
 #define M2_N 5		// right Wheel
 #define M2_P 7		// right Wheel
 
-#define L_ROTATE 1 	// rotate left
-#define R_ROTATE 2 	// rotate right
+#define L_ROT 1 	// rotate left
+#define R_ROT 2 	// rotate right
 
 #define wheelL 0
 #define wheelR	1	
@@ -30,12 +30,12 @@ void mtrCtrl(unsigned char speed, unsigned char rot, unsighed char wheel)
 	unsigned char rot,whl;
 	if(wheel==wheelL)
 	{
-		if(rot==L_ROTATE)
+		if(rot==L_ROT)
 		{
 			digitalWrite(M1_P,LOW);
 			softPwmWrite(M1_N,speed);
 		}
-		else if(rot==R_ROTATE)
+		else if(rot==R_ROT)
 		{
 			digitalWrite(M1_N,LOW);
 			softPwmWrite(M1_P,speed);
@@ -43,12 +43,12 @@ void mtrCtrl(unsigned char speed, unsigned char rot, unsighed char wheel)
 	}
 	else
 	{
-		if(rot==L_ROTATE)
+		if(rot==L_ROT)
 		{
 			digitalWrite(M2_P,LOW);
 			softPwmWrite(M2_N,speed);
 		}
-		else if(rot==R_ROTATE)
+		else if(rot==R_ROT)
 		{
 			digitalWrite(M2_N,LOW);
 			softPwmWrite(M2_P,speed);
@@ -58,13 +58,13 @@ void mtrCtrl(unsigned char speed, unsigned char rot, unsighed char wheel)
 
 void MotorControl2(unsigned char speed, unsigned char rotate)
 {
-	if(rotate == LEFT_ROTATE)
+	if(rotate == LEFT_ROT)
 	{
 		digitalWrite(M2_P_PIN,LOW);
 		softPwmWrite(M2_N_PIN,speed);
 	}
 
-	else if(rotate == RIGHT_ROTATE)
+	else if(rotate == RIGHT_ROT)
 	{
 		digitalWrite(M2_N_PIN,LOW);
 		softPwmWrite(M2_P_PIN,speed);
@@ -73,19 +73,19 @@ void MotorControl2(unsigned char speed, unsigned char rotate)
 
 void foward(unsigned char speed)
 {
-	mtrCtrl(speed,L_rotate,wheelL);
-	mtrCtrl(speed,L_rotate,wheelR);
+	mtrCtrl(speed,L_ROT,wheelL);
+	mtrCtrl(speed,L_ROT,wheelR);
 }
 void rot_L(unsigned char speed)
 {
-	mtrCtrl(speed,R_rotate,wheelL);
-	mtrCtrl(speed,L_rotate,wheelR);
+	mtrCtrl(speed,R_ROT,wheelL);
+	mtrCtrl(speed,L_ROT,wheelR);
 }
 
 void rot_R(unsigned char speed)
 {
-	mtrCtrl(speed,L_rotate,wheelL);
-	mtrCtrl(speed,R_rotate,wheelR);
+	mtrCtrl(speed,L_ROT,wheelL);
+	mtrCtrl(speed,R_ROT,wheelR);
 }
 
 int main()
