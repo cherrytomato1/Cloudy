@@ -1,12 +1,7 @@
 #include <stdio.h>
 #include <wiringPi.h>
-#include <softTone.h>
 #include <softPwm.h>
 
-#define KEY_1 20	// up
-#define KEY_2 25	// down
-#define KEY_3 21	// right 
-#define KEY_4 16	// left
 
 #define M1_N 17		// left Wheel
 #define M1_P 27		// right wheel
@@ -20,8 +15,6 @@
 #define WheelL 0
 #define WheelR	1	
 
-const int KEYTable[MAX_KEY] =	{KEY_1,KEY_2,KEY_3,KEY_4,};					 
-//const char KEYChar[MAX_KEY] =	{'1', '2', '3', '4', '5', '6', '7', '8', '9', '*','0','#',};
 
 void MotorStop()
 {
