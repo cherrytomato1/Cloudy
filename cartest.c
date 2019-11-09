@@ -88,7 +88,7 @@ int main()
 	softPwmCreate(M2_N, 0, 100);
 	while(1)
 	{
-		forward(50);
+		foward(50);
 		delay(1000);
 		rot_L(50);
 		delay(1000);
