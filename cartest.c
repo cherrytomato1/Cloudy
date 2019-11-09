@@ -18,14 +18,14 @@
 
 void MotorStop()
 {
-	softPwmWrite(M1_N_PIN,0);
-	softPwmWrite(M1_P_PIN,0);
-	softPwmWrite(M1_N_PIN,0);
-	softPwmWrite(M1_P_PIN,0);
+	softPwmWrite(M1_N,0);
+	softPwmWrite(M1_P,0);
+	softPwmWrite(M1_N,0);
+	softPwmWrite(M1_P,0);
 }
 
 
-void mtrCtrl(unsigned char speed, unsigned char rot, unsighed char wheel)
+void mtrCtrl(unsigned char speed, unsigned char rot, unsigned char wheel)
 {
 	unsigned char rot,whl;
 	if(wheel==wheelL)
@@ -56,21 +56,6 @@ void mtrCtrl(unsigned char speed, unsigned char rot, unsighed char wheel)
 	}
 }
 
-void MotorControl2(unsigned char speed, unsigned char rotate)
-{
-	if(rotate == LEFT_ROT)
-	{
-		digitalWrite(M2_P_PIN,LOW);
-		softPwmWrite(M2_N_PIN,speed);
-	}
-
-	else if(rotate == RIGHT_ROT)
-	{
-		digitalWrite(M2_N_PIN,LOW);
-		softPwmWrite(M2_P_PIN,speed);
-	}
-}
-
 void foward(unsigned char speed)
 {
 	mtrCtrl(speed,L_ROT,wheelL);
@@ -97,7 +82,7 @@ int main()
 	pinMode(M1_P, OUTPUT);
 	pinMode(M1_N, OUTPUT);
 	pinMode(M2_P, OUTPUT);
-	pinMode(M2_N_PIN, OUTPUT);
+	pinMode(M2_N, OUTPUT);
 	softPwmCreate(M1_P, 0, 100);
 	softPwmCreate(M1_N, 0, 100);
 	softPwmCreate(M2_P, 0, 100);
