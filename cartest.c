@@ -30,6 +30,34 @@ void MotorStop2()
 
 void MtrCtnl(unsigned char speed, unsigned char rot, unsighed char wheel)
 {
+	unsigned char rot,whl;
+	if(wheel==wheelL)
+	{
+		if(rot==L_ROTATE)
+		{
+			digitalWrite(M1_P,LOW);
+			softPwmWrite(M1_N,speed);
+		}
+		else if(rot==R_ROTATE)
+		{
+			digitalWrite(M1_N,LOW);
+			softPwmWrite(M1_P,speed);
+		}
+	}
+	else
+	{
+		if(rot==L_ROTATE)
+		{
+			digitalWrite(M2_P,LOW);
+			softPwmWrite(M2_N,speed);
+		}
+		else if(rot==R_ROTATE)
+		{
+			digitalWrite(M2_N,LOW);
+			softPwmWrite(M2_P,speed);
+		}
+	}
+}
 	
 void MotorControl(unsigned char speed, unsigned char rotate)
 {
