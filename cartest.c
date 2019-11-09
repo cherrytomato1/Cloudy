@@ -94,6 +94,9 @@ int main()
 		delay(1000);
 		rot_R(50);
 		delay(1000);
+		digitalWrite(M2_N,LOW);
+		softPwmWrite(M2_P,100);
+		delay(1500);
 	}
 	return 0;
 }
