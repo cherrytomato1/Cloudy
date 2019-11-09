@@ -27,7 +27,6 @@ void MotorStop()
 
 void mtrCtrl(unsigned char speed, unsigned char rot, unsigned char wheel)
 {
-	unsigned char rot,whl;
 	if(wheel==wheelL)
 	{
 		if(rot==L_ROT)
