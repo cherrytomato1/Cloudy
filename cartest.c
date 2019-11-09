@@ -7,24 +7,21 @@
 #define KEY_2 25	// down
 #define KEY_3 21	// right 
 #define KEY_4 16	// left
-#define M1_N_PIN 17	// left Wheel
-#define M1_P_PIN 27	// left Wheel
-#define M2_N_PIN 5	// right Wheel
-#define M2_P_PIN 7	// right Wheel
 
-#define MAX_KEY 4
-#define LEFT_ROTATE 	1
-#define RIGHT_ROTATE	2
+#define M1_N 17		// left Wheel
+#define M1_P 27		// right wheel
+
+#define M2_N 5		// right Wheel
+#define M2_P 7		// right Wheel
+
+#define L_ROTATE 1 	// rotate left
+#define R_ROTATE 2 	// rotate right
+
+#define WheelL 0
+#define WheelR	1	
+
 const int KEYTable[MAX_KEY] =	{KEY_1,KEY_2,KEY_3,KEY_4,};					 
 //const char KEYChar[MAX_KEY] =	{'1', '2', '3', '4', '5', '6', '7', '8', '9', '*','0','#',};
-int kRead()
-{
-	int i,kStat=0;	
-	for(i=0;i<MAX_KEY;i++)
-		if( !digitalRead(KEYTable[i]) )
-			kStat |=(1<<i);
-	return kStat;
-}
 
 void MotorStop()
 {
@@ -37,6 +34,10 @@ void MotorStop2()
 	softPwmWrite(M2_P_PIN,0);
 }
 
+
+void MtrCtnl(unsigned char speed, unsigned char rot, unsighed char wheel)
+{
+	
 void MotorControl(unsigned char speed, unsigned char rotate)
 {
 	if(rotate == LEFT_ROTATE)
@@ -68,63 +69,21 @@ void MotorControl2(unsigned char speed, unsigned char rotate)
 
 int main()
 {
-	int i,j=0,kStat,speed=0;
+	int i,j;
 	if(wiringPiSetupGpio()==-1)
 		return 1;
-	for(i=0; i<MAX_KEY;i++)
-		pinMode(KEYTable[i], INPUT);
-	pinMode(M1_P_PIN, OUTPUT);
-	pinMode(M1_N_PIN, OUTPUT);
-	pinMode(M2_P_PIN, OUTPUT);
+
+	pinMode(M1_P, OUTPUT);
+	pinMode(M1_N, OUTPUT);
+	pinMode(M2_P, OUTPUT);
 	pinMode(M2_N_PIN, OUTPUT);
-	softPwmCreate(M1_P_PIN, 0, 100);
-	softPwmCreate(M1_N_PIN, 0, 100);
-	softPwmCreate(M2_P_PIN, 0, 100);
-	softPwmCreate(M2_N_PIN, 0, 100);
+	softPwmCreate(M1_P, 0, 100);
+	softPwmCreate(M1_N, 0, 100);
+	softPwmCreate(M2_P, 0, 100);
+	softPwmCreate(M2_N, 0, 100);
 	while(1)
 	{
-		kStat=kRead();
 
-		for(i=0; i<MAX_KEY;i++)
-		{
-			if( ( kStat & ( 1<<i ) ) )			// 0000  0001 << 0~2 0000 0010 & 0000 0010 
-			{
-				switch(i)
-				{
-					case 0:
-						MotorControl(10, RIGHT_ROTATE);
-						MotorControl2(10, RIGHT_ROTATE);
-						printf("UP!! \n");
-						delay(2000);
-						MotorStop();
-						MotorStop2();
-						break;
-					case 1:
-						MotorControl(10, LEFT_ROTATE);
-						MotorControl2(10, LEFT_ROTATE);
-						printf("DOWN!! \n");
-						delay(2000);
-						MotorStop();
-						MotorStop2();
-						break;
-					case 2:
-						MotorControl(10, RIGHT_ROTATE);
-						MotorControl2(10, LEFT_ROTATE);
-						printf("RIGHT!! \n");
-						delay(2000);
-						MotorStop();
-						MotorStop2();
-						break;
-					case 3:
-						MotorControl(10, LEFT_ROTATE);
-						MotorControl2(10, RIGHT_ROTATE);
-						printf("LEFT!! \n");
-						delay(2000);
-						MotorStop();
-						MotorStop2();
-				}
-			}
-		}
 	}
 	return 0;
 }
