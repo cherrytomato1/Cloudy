@@ -47,13 +47,16 @@ if __name__ == "__main__":
     IO.setup(motorA2, IO.out)
     IO.setup(motorB1, IO.out)
     IO.setup(motorB2, IO.out)
-
-    while True:
-        forward()
-        time.sleep(2)                          # 2초동안
-        backward()
-        time.sleep(2)
-        rot_L()
-        time.sleep(2)
-        rot_R()
-        time.sleep(2)
+    
+    try:
+        while True:
+            forward()
+            time.sleep(2)                          # 2초동안
+            backward()
+            time.sleep(2)
+            rot_L()
+            time.sleep(2)
+            rot_R()
+            time.sleep(2)
+    finally:
+        IO.cleanup()
