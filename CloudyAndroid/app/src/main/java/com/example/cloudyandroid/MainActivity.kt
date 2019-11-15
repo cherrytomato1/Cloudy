@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.EditText
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
+import java.net.Socket
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,16 +16,28 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var etMsg = findViewById(R.id.etMsg) as EditText
-        var etIp = findViewById<EditText>(R.id.etIp)
-        var sendMsg = "temp".toByteArray()
+        var Msg = findViewById(R.id.etMsg) as EditText
+        var etIP = findViewById<EditText>(R.id.etIp)
+        var sendMsg = "t".toByteArray()
 
-        var hostIP : Int
+        var hostIP ="test"
         val PORT = 8800
 
-
         btnSend.setOnClickListener {
-            Toast.makeText(this,etMsg.text,Toast.LENGTH_LONG).show()
+
+
+            //hostIP = Integer.parseInt(etIP.text.toString())
+
+            hostIP = etIP.text.toString()
+
+
+            Toast.makeText(this,hostIP,Toast.LENGTH_LONG).show()
+            val sock = Socket(hostIP,PORT)
+
+            val outStream = sock.getOutputStream()
+            val inStrean = sock.getInputStream()
+
+
         }
     }
 }

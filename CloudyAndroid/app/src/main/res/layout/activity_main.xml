@@ -6,6 +6,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <EditText
+            android:text="172.16.106.95"
             android:id="@+id/etIp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
