@@ -7,7 +7,7 @@
 #define M1_P 27		// right wheel
 
 #define M2_N 5		// right Wheel
-#define M2_P 7		// right Wheel
+#define M2_P 6		// right Wheel
 
 #define L_ROT 1 	// rotate left
 #define R_ROT 2 	// rotate right
@@ -16,12 +16,12 @@
 #define wheelR	1	
 
 
-void MotorStop()
+void mtrStop()
 {
 	softPwmWrite(M1_N,0);
 	softPwmWrite(M1_P,0);
-	softPwmWrite(M1_N,0);
-	softPwmWrite(M1_P,0);
+	softPwmWrite(M2_N,0);
+	softPwmWrite(M2_P,0);
 }
 
 
@@ -88,11 +88,21 @@ int main()
 	softPwmCreate(M2_N, 0, 100);
 	while(1)
 	{
-		foward(50);
+		foward(10);
+		delay(2000);
+		mtrStop();
+		
+		delay(2000);
+		
+		
+		rot_L(10);
+		delay(2000);
+		mtrStop();
+		
+		rot_R(10);
 		delay(1000);
-		rot_L(50);
-		delay(1000);
-		rot_R(50);
+		
+		mtrStop();
 		delay(1000);
 		digitalWrite(M2_N,LOW);
 		softPwmWrite(M2_P,100);

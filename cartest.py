@@ -1,5 +1,6 @@
-import RPi.GPIO as IO
+import RPi.GPIO as GPIO
 import time
+
 
 STOP  = 0
 FORWARD  = 1
@@ -10,66 +11,66 @@ WheelL = 0
 WheelR = 1
 
 def MotorInit():
+    GPIO.setmode(GPIO.BCM)  
     motorA1 = 17  # left Wheel
     motorA2 = 27
     pwmA = 23
     motorB1 = 5  # right Wheel
-    motorB2 = 7
-    pwmB = 24
-    IO.setmode(IO.BCM)                     # 핀 넘버 부르는 방식 -> GPIO핀 번호로 사용
-    IO.setwarnings(False)                  # 오류 방지
-    IO.setup(motorA1, IO.out)              # 인풋 아웃풋 설정 (pinMode())
-    IO.setup(motorA2, IO.out)
-    IO.setup(motorB1, IO.out)
-    IO.setup(motorB2, IO.out)
-    pwm1 = IO.PWM(pwmA, 100)
-    pwm2 = IO.PWM(pwmB, 100)
+    motorB2 = 6
+    pwmB = 24                   
+    GPIO.setwarnings(False)                  
+    GPIO.setup(motorA1, GPIO.OUT)             
+    GPIO.setup(motorA2, GPIO.OUT)
+    GPIO.setup(motorB1, GPIO.OUT)
+    GPIO.setup(motorB2, GPIO.OUT)
+    pwm1 = GPIO.PWM(pwmA, 100)
+    pwm2 = GPIO.PWM(pwmB, 100)
     pwm1.start(0) 
     pwm2.start(0)
     
 def MotorStop():
-    IO.output(motorA1, IO.LOW)
-    IO.output(motorA2, IO.LOW)
-    IO.output(motorB1, IO.LOW)
-    IO.output(motorB2, IO.LOW)
+    GPIO.output(motorA1, GPIO.LOW)
+    GPIO.output(motorA2, GPIO.LOW)
+    GPIO.output(motorB1, GPIO.LOW)
+    GPIO.output(motorB2, GPIO.LOW)
 
 def forward():
-    IO.output(motorA1, IO.HIGH)
-    IO.output(motorA2, IO.LOW)
-    IO.output(motorB1, IO.HIGH)
-    IO.output(motorB2, IO.LOW)
+    GPIO.output(motorA1, GPIO.HIGH)
+    GPIO.output(motorA2, GPIO.LOW)
+    GPIO.output(motorB1, GPIO.HIGH)
+    GPIO.output(motorB2, GPIO.LOW)
 
 
 def backward():
-    IO.output(motorA1, IO.LOW)
-    IO.output(motorA2, IO.HIGH)
-    IO.output(motorB1, IO.LOW)
-    IO.output(motorB2, IO.HIGH)
+    GPIO.output(motorA1, GPIO.LOW)
+    GPIO.output(motorA2, GPIO.HIGH)
+    GPIO.output(motorB1, GPIO.LOW)
+    GPIO.output(motorB2, GPIO.HIGH)
 
 
 def rot_L():
-    IO.output(motorA1, IO.HIGH)
-    IO.output(motorA2, IO.LOW)
-    IO.output(motorB1, IO.LOW)
-    IO.output(motorB2, IO.HIGH)
+    GPIO.output(motorA1, GPIO.HIGH)
+    GPIO.output(motorA2, GPIO.LOW)
+    GPIO.output(motorB1, GPIO.LOW)
+    GPIO.output(motorB2, GPIO.HIGH)
 
 
 def rot_R():
-    IO.output(motorA1, IO.LOW)
-    IO.output(motorA2, IO.HIGH)
-    IO.output(motorB1, IO.HIGH)
-    IO.output(motorB2, IO.LOW)
+    GPIO.output(motorA1, GPIO.LOW)
+    GPIO.output(motorA2, GPIO.HIGH)
+    GPIO.output(motorB1, GPIO.HIGH)
+    GPIO.output(motorB2, GPIO.LOW)
     
 def setMotor(stat, speed):
     pwm1.ChangeDutyCycle(speed)
     pwm2.ChangeDutyCycle(speed)
     if stat == STOP:
         MotorStop()
-    else if stat == FORWARD:
+    elif stat == FORWARD:
         forward()
-    else if stat == BACKWARD:
+    elif stat == BACKWARD:
         backward()
-    else if stat == RIGHT:
+    elif stat == RIGHT:
         rot_R()
     else:
         rot_L()
@@ -79,7 +80,7 @@ if __name__ == "__main__":
     try:
         while True:
             setMotor(FORWARD, 30)
-            time.sleep(2)                          # 2초동안
+            time.sleep(2)                        
             setMotor(BACKWARD, 30)
             time.sleep(2)
             setMotor(LEFT, 30)
@@ -87,4 +88,4 @@ if __name__ == "__main__":
             setMotor(RIGHT, 30)
             time.sleep(2)
     finally:
-        IO.cleanup()
+        GPIO.cleanup()
