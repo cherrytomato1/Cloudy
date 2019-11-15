@@ -72,27 +72,29 @@ GPIO.setwarnings(False)
 
 pwmA = setPinConfig(ENA, IN1, IN2)
 pwmB = setPinConfig(ENB, IN3, IN4)
-
+spd=[20, 50, 70, 100]
 print("FORWARD")
-setMotor(CH1, 100, FORWARD)
-setMotor(CH2, 100, FORWARD)
+for i in spd:
+    setMotor(CH1, i, FORWARD)
+    setMotor(CH2, i, FORWARD)
+    sleep(3)
 
-sleep(5)
+
 
 print("BACKWORD")
 setMotor(CH1, 100, BACKWORD)
 setMotor(CH2, 100, BACKWORD)
-sleep(5)
+sleep(1)
 
 print("LEFT")
 setMotor(CH1, 100, FORWARD)
 setMotor(CH2, 100, BACKWORD)
-sleep(5)
+sleep(1)
 
 print("RIGHT")
-setMotor(CH1, 100, BACKWARD)
+setMotor(CH1, 100, BACKWORD)
 setMotor(CH2, 100, FORWARD)
-sleep(5)
+sleep(1)
 
 setMotor(CH1, 100, STOP)
 setMotor(CH2, 100, STOP)
