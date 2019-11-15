@@ -35,7 +35,9 @@ class MainActivity : AppCompatActivity() {
             val sock = Socket(hostIP,PORT)
 
             val outStream = sock.getOutputStream()
-            val inStrean = sock.getInputStream()
+            val inStream = sock.getInputStream()
+
+            
 
 
         }
