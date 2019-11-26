@@ -3,6 +3,7 @@ package com.example.cloudyandroid
 import android.annotation.SuppressLint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,9 +26,9 @@ class MainActivity : AppCompatActivity() {
         var sendMsg = "t".toByteArray()
 
         //호스트 주소 선언 및 임시 주소 할당 (string)
-        var addr ="172.16.106.95"
+        var addr ="172.20.10.11"
         // 포트
-        val PORT = 8800
+        val PORT = 8080
 
         //버튼 클릭 리스너
         btnSend.setOnClickListener {
@@ -43,8 +44,9 @@ class MainActivity : AppCompatActivity() {
 
 
             try{
-                val sock : Socket = Socket(hostIP,PORT)
-
+                Log.d("디버그", "socket init IP : "+hostIP + "PORT : " + PORT)
+                val sock  = Socket(hostIP,PORT)
+                Log.d("디버그", "socket connected")
                 val outStream : OutputStream = sock.getOutputStream()
                 val inStream : InputStream = sock.getInputStream()
 
@@ -55,7 +57,8 @@ class MainActivity : AppCompatActivity() {
                 sock.close()
             }
             catch (e:Exception){
-
+                Log.e("디버그", "socket error")
+                e.printStackTrace()
             }
 
 
