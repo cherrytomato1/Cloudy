@@ -33,16 +33,25 @@ class MainActivity : AppCompatActivity(),CoroutineScope {
         mJob = Job()
 
         //launch 정의
-        launch {
-            //UI 스레드 에서 동작 합니다
-            print(Thread.currentThread().name)
-            //dispatcher 를 사용하여 context 사이를 전환 합니다
-            val deferred = async(Dispatchers.Default) {
-                //백그라운드 스레드 에서 동작합니다
-                10 + 10
+
+        launch() {
+            try {
+                Log.d("디버그", "socket init IP : " + hostIP + "PORT : " + PORT)
+                val sock = Socket(hostIP, PORT)
+                Log.d("디버그", "socket connected")
+                val outStream: OutputStream = sock.getOutputStream()
+                val inStream: InputStream = sock.getInputStream()
+
+
+
+                outStream.write(sendMsg)
+
+                sock.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("디버그", e.toString())
+
             }
-            //UI 스레드 에서 동작 합니다
-            print(deferred.await())
         }
 
 
@@ -56,6 +65,12 @@ class MainActivity : AppCompatActivity(),CoroutineScope {
         // 포트
         val PORT = 8080
 
+
+
+
+
+        var socketCrt : Job
+
         //버튼 클릭 리스너
         btnSend.setOnClickListener {
 
@@ -67,28 +82,30 @@ class MainActivity : AppCompatActivity(),CoroutineScope {
             //inetAddress 형으로 받기
             var hostIP = InetAddress.getByName(addr)
 
+            var i : Int = 0
+            socketCrt = launch() {
+                try {
+                    Log.d("디버그", "socket init IP : " + hostIP + "PORT : " + PORT)
+                    val sock = Socket(hostIP, PORT)
+                    Log.d("디버그", "socket connected")
+                    val outStream: OutputStream = sock.getOutputStream()
+                    val inStream: InputStream = sock.getInputStream()
 
-            val socketCrt : Job = launch(){}
-            try{
-                Log.d("디버그", "socket init IP : "+hostIP + "PORT : " + PORT)
-                val sock  = Socket(hostIP,PORT)
-                Log.d("디버그", "socket connected")
-                val outStream : OutputStream = sock.getOutputStream()
-                val inStream : InputStream = sock.getInputStream()
 
-                Toast.makeText(this,addr,Toast.LENGTH_LONG).show()
 
-                outStream.write(sendMsg)
+                    outStream.write(sendMsg)
 
-                sock.close()
+                    sock.close()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Log.e("디버그", e.toString())
+
+                }
             }
-            catch (e:Exception){
-                Log.e("디버그", "socket error")
-                e.printStackTrace()
-            }
-
 
         }
+
+
     }
 
     override fun onDestroy() {
