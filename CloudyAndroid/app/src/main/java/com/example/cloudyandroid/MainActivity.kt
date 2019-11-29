@@ -13,15 +13,39 @@ import java.lang.Exception
 import java.net.InetAddress
 import java.net.Socket
 import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 
-
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),CoroutineScope {
 
     @SuppressLint("ResourceType")
+
+    //코루틴 인터페이스 상속 및 추가
+    private lateinit var mJob: Job
+
+    override val coroutineContext: CoroutineContext
+        get() = mJob + Dispatchers.Main
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mJob = Job()
+
+        //launch 정의
+        launch {
+            //UI 스레드 에서 동작 합니다
+            print(Thread.currentThread().name)
+            //dispatcher 를 사용하여 context 사이를 전환 합니다
+            val deferred = async(Dispatchers.Default) {
+                //백그라운드 스레드 에서 동작합니다
+                10 + 10
+            }
+            //UI 스레드 에서 동작 합니다
+            print(deferred.await())
+        }
+
+
 
         var Msg = findViewById(R.id.etMsg) as EditText
         var etIP = findViewById<EditText>(R.id.etIp)
@@ -65,5 +89,11 @@ class MainActivity : AppCompatActivity() {
 
 
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        mJob.cancel()
     }
 }
