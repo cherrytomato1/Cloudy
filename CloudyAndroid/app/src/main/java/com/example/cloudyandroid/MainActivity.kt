@@ -12,6 +12,8 @@ import java.io.OutputStream
 import java.lang.Exception
 import java.net.InetAddress
 import java.net.Socket
+import kotlinx.coroutines.*
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             var hostIP = InetAddress.getByName(addr)
 
 
-
+            val socketCrt : Job = launch(){}
             try{
                 Log.d("디버그", "socket init IP : "+hostIP + "PORT : " + PORT)
                 val sock  = Socket(hostIP,PORT)
