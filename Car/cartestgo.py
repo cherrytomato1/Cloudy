@@ -1,4 +1,3 @@
-
 import RPi.GPIO as GPIO
 from time import sleep
 
@@ -74,35 +73,8 @@ pwmA = setPinConfig(ENA, IN1, IN2)
 pwmB = setPinConfig(ENB, IN3, IN4)
 spd=[20, 50, 70, 100]
 print("UP")
-setMotor(CH1, 100, FORWARD)
-setMotor(CH2, 100, FORWARD)
-sleep(2)
-print("DOWN")
-setMotor(CH1, 100, BACKWORD)
-setMotor(CH2, 100, BACKWORD)
-sleep(2)
-#for i in spd:
-#    setMotor(CH1, i, FORWARD)
-#    setMotor(CH2, i, FORWARD)
-#    sleep(3)
-
-
-
-print("LEFT")
 setMotor(CH1, 50, FORWARD)
-setMotor(CH2, 50, BACKWORD)
-sleep(0.5)
-setMotor(CH1, 100, FORWARD)
-setMotor(CH2, 100, FORWARD)
-sleep(1)
-
-print("RIGHT")
-setMotor(CH1, 50, BACKWORD)
 setMotor(CH2, 50, FORWARD)
-sleep(0.5)
-setMotor(CH1, 100, FORWARD)
-setMotor(CH2, 100, FORWARD)
-sleep(1)
-
+sleep(3)
 
 GPIO.cleanup()

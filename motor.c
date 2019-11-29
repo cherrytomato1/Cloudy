@@ -15,13 +15,12 @@
 #define wheelL 0
 #define wheelR	1	
 
-
+#define ENA 16
+#define ENB	20	
 void mtrStop()
 {
-	softPwmWrite(M1_N,0);
-	softPwmWrite(M1_P,0);
-	softPwmWrite(M2_N,0);
-	softPwmWrite(M2_P,0);
+	softPwmWrite(ENA,0);
+	softPwmWrite(ENB,0);
 }
 
 
@@ -32,12 +31,12 @@ void mtrCtrl(unsigned char speed, unsigned char rot, unsigned char wheel)
 		if(rot==L_ROT)
 		{
 			digitalWrite(M1_P,LOW);
-			softPwmWrite(M1_N,speed);
+		//	softPwmWrite(ENA,speed);
 		}
 		else if(rot==R_ROT)
 		{
 			digitalWrite(M1_N,LOW);
-			softPwmWrite(M1_P,speed);
+		//	softPwmWrite(ENA,speed);
 		}
 	}
 	else
@@ -45,12 +44,12 @@ void mtrCtrl(unsigned char speed, unsigned char rot, unsigned char wheel)
 		if(rot==L_ROT)
 		{
 			digitalWrite(M2_P,LOW);
-			softPwmWrite(M2_N,speed);
+			softPwmWrite(ENA,speed);
 		}
 		else if(rot==R_ROT)
 		{
 			digitalWrite(M2_N,LOW);
-			softPwmWrite(M2_P,speed);
+			softPwmWrite(ENA,speed);
 		}
 	}
 }
@@ -82,31 +81,18 @@ int main()
 	pinMode(M1_N, OUTPUT);
 	pinMode(M2_P, OUTPUT);
 	pinMode(M2_N, OUTPUT);
-	softPwmCreate(M1_P, 0, 100);
-	softPwmCreate(M1_N, 0, 100);
-	softPwmCreate(M2_P, 0, 100);
-	softPwmCreate(M2_N, 0, 100);
+	pinMode(ENA, OUTPUT);
+	pinMode(ENB, OUTPUT);
+	softPwmCreate(ENA, 0, 100);
+	softPwmCreate(ENB, 0, 100);
 	while(1)
 	{
-		foward(100);
-		delay(2000);
-		mtrStop();
-		
-		delay(2000);
-		
-		
-		rot_L(100);
-		delay(2000);
-		mtrStop();
-		
-		rot_R(100);
-		delay(1000);
-		
-		mtrStop();
-		delay(1000);
-		digitalWrite(M2_N,LOW);
-		softPwmWrite(M2_P,100);
-		delay(1500);
+		digitalWrite(M1_P, HIGH);
+		digitalWrite(M1_N, LOW);
+		softPwmWrite(ENA, 50);
+		digitalWrite(M2_P, HIGH);
+		digitalWrite(M2_N, LOW);
+		softPwmWrite(ENB, 50);
 	}
 	return 0;
 }
