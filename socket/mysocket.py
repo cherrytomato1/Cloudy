@@ -1,6 +1,6 @@
 import socket
 
-HOST = "192.168.0.8"
+HOST = "192.168.0.12"
 PORT = 8080
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print ('Socket created')
