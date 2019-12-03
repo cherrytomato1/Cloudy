@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
+import android.widget.Toast.LENGTH_SHORT
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.InputStream
 import java.io.OutputStream
@@ -13,6 +15,7 @@ import java.lang.Exception
 import java.net.InetAddress
 import java.net.Socket
 import kotlinx.coroutines.*
+import java.util.Calendar.LONG
 import kotlin.coroutines.CoroutineContext
 
 
@@ -65,13 +68,14 @@ class MainActivity : AppCompatActivity(),CoroutineScope {
             var hostIP = InetAddress.getByName(addr)
 
             var i : Int = 0
-            socketCrt = launch(newSingleThreadContext("testThread")) {
+            socketCrt = launch(Dispatchers.Default) {
                 try {
                     Log.d("디버그", "socket init IP : " + hostIP + "PORT : " + PORT)
                     val sock = Socket(hostIP, PORT)
                     Log.d("디버그", "socket connected")
+                    Toast.makeText(applicationContext,"소켓 연결됨", LENGTH_LONG).show()
                     val outStream: OutputStream = sock.getOutputStream()
-                    val inStream: InputStream = sock.getInputStream()
+                    //val inStream: InputStream = sock.getInputStream()
 
 
 

@@ -6,22 +6,33 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <EditText
-            android:text="172.20.10.11"
+            android:text="192.168.0.3"
             android:id="@+id/etIp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Insert IP"
     />
+
+
+    <Button
+            android:id="@+id/btnCnct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="socket connect"
+    />
+
     <EditText
             android:id="@+id/etMsg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Insert Message"
     />
+
     <Button
             android:id="@+id/btnSend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="socket test"
+            android:text="msg send"
     />
+
 </LinearLayout>
