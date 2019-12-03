@@ -1,5 +1,0 @@
-1. 해당 폴더로 이동
-2. git add 파일 이름
-3. git commit -m "설명"
-4. git pull origin master
-5. git push origin master

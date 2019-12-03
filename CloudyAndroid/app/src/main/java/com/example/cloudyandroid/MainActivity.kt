@@ -45,11 +45,6 @@ class MainActivity : AppCompatActivity(),CoroutineScope {
         //호스트 주소 선언 및 임시 주소 할당 (string)
         // 포트
         val PORT = 8080
-
-
-
-
-
         var socketCrt : Job
 
         //버튼 클릭 리스너
@@ -59,7 +54,7 @@ class MainActivity : AppCompatActivity(),CoroutineScope {
 
             //addr에 에딧 텍스트 값 받기
             var addr  = etIP.text.toString()
-            var sendMsg = Msg.text.toString()
+            var sendMsg = Integer.parseInt(Msg.text.toString())
 
             //inetAddress 형으로 받기
             var hostIP = InetAddress.getByName(addr)
@@ -75,7 +70,7 @@ class MainActivity : AppCompatActivity(),CoroutineScope {
 
 
 
-                    outStream.write()
+                    outStream.write(sendMsg)
 
                     sock.close()
                 } catch (e: Exception) {
