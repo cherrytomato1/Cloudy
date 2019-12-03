@@ -34,34 +34,15 @@ class MainActivity : AppCompatActivity(),CoroutineScope {
 
         //launch 정의
 
-        launch() {
-            try {
-                Log.d("디버그", "socket init IP : " + hostIP + "PORT : " + PORT)
-                val sock = Socket(hostIP, PORT)
-                Log.d("디버그", "socket connected")
-                val outStream: OutputStream = sock.getOutputStream()
-                val inStream: InputStream = sock.getInputStream()
 
-
-
-                outStream.write(sendMsg)
-
-                sock.close()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Log.e("디버그", e.toString())
-
-            }
-        }
 
 
 
         var Msg = findViewById(R.id.etMsg) as EditText
         var etIP = findViewById<EditText>(R.id.etIp)
-        var sendMsg = "t".toByteArray()
+
 
         //호스트 주소 선언 및 임시 주소 할당 (string)
-        var addr ="172.20.10.11"
         // 포트
         val PORT = 8080
 
@@ -77,13 +58,14 @@ class MainActivity : AppCompatActivity(),CoroutineScope {
             //hostIP = Integer.parseInt(etIP.text.toString())
 
             //addr에 에딧 텍스트 값 받기
-            addr  = etIP.text.toString()
+            var addr  = etIP.text.toString()
+            var sendMsg = Msg.text.toString()
 
             //inetAddress 형으로 받기
             var hostIP = InetAddress.getByName(addr)
 
             var i : Int = 0
-            socketCrt = launch() {
+            socketCrt = launch(newSingleThreadContext("testThread")) {
                 try {
                     Log.d("디버그", "socket init IP : " + hostIP + "PORT : " + PORT)
                     val sock = Socket(hostIP, PORT)
@@ -93,7 +75,7 @@ class MainActivity : AppCompatActivity(),CoroutineScope {
 
 
 
-                    outStream.write(sendMsg)
+                    outStream.write()
 
                     sock.close()
                 } catch (e: Exception) {
