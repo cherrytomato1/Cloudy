@@ -1,6 +1,6 @@
 import socket
 
-HOST = "192.168.0.12"
+HOST = "192.168.0.7"
 PORT = 8080
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print ('Socket created')
@@ -19,7 +19,7 @@ def do_some_stuffs_with_input(input_string):
     elif input_string == "4":
         input_string = "RIGHT"
     else :
-        input_string = input_string + " ??"
+        input_string = input_string + ""
     return input_string
 
 while True:
