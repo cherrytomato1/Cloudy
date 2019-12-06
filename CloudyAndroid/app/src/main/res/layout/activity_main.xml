@@ -21,18 +21,6 @@
             android:text="socket connect"
     />
 
-    <EditText
-            android:id="@+id/etMsg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Insert Message"
-    />
 
-    <Button
-            android:id="@+id/btnSend"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="msg send"
-    />
 
 </LinearLayout>

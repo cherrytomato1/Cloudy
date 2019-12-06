@@ -19,7 +19,7 @@ import java.util.Calendar.LONG
 import kotlin.coroutines.CoroutineContext
 
 
-class MainActivity : AppCompatActivity(),CoroutineScope {
+class MainActivity : AppCompatActivity(), CoroutineScope {
 
     @SuppressLint("ResourceType")
 
@@ -35,12 +35,6 @@ class MainActivity : AppCompatActivity(),CoroutineScope {
         setContentView(R.layout.activity_main)
         mJob = Job()
 
-        //launch 정의
-
-
-
-
-
         var Msg = findViewById(R.id.etMsg) as EditText
         var etIP = findViewById<EditText>(R.id.etIp)
 
@@ -48,40 +42,35 @@ class MainActivity : AppCompatActivity(),CoroutineScope {
         //호스트 주소 선언 및 임시 주소 할당 (string)
         // 포트
         val PORT = 8080
-
-
-
-
-
-        var socketCrt : Job
+        var socketCrt: Job
 
         //버튼 클릭 리스너
-        btnSend.setOnClickListener {
+        btnCnct.setOnClickListener {
 
             //hostIP = Integer.parseInt(etIP.text.toString())
 
             //addr에 에딧 텍스트 값 받기
-            var addr  = etIP.text.toString()
-            var sendMsg  = Msg.text.toString().toByteArray()
+            var addr = etIP.text.toString()
+            var sendMsg = Msg.text.toString().toByteArray()
 
             //inetAddress 형으로 받기
             var hostIP = InetAddress.getByName(addr)
 
-            var i : Int = 0
+            var i: Int = 0
             socketCrt = launch(Dispatchers.Default) {
                 try {
                     Log.d("디버그", "socket init IP : " + hostIP + "PORT : " + PORT)
                     val sock = Socket(hostIP, PORT)
                     Log.d("디버그", "socket connected")
-                    Toast.makeText(applicationContext,"소켓 연결됨", LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, "소켓 연결됨", LENGTH_LONG).show()
                     val outStream: OutputStream = sock.getOutputStream()
                     //val inStream: InputStream = sock.getInputStream()
-
 
 
                     outStream.write(sendMsg)
 
                     sock.close()
+
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Log.e("디버그", e.toString())
@@ -90,8 +79,6 @@ class MainActivity : AppCompatActivity(),CoroutineScope {
             }
 
         }
-
-
     }
 
     override fun onDestroy() {
