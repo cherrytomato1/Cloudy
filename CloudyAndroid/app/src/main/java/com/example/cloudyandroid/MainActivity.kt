@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(){
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == 3000)
-            if(resultCode == Activity.RESULT_FIRST_USER){
+            if(resultCode == -1){
                 val alertBuilder = AlertDialog.Builder(ContextThemeWrapper(this@MainActivity,R.style.Theme_AppCompat_Light_Dialog))
 
                 alertBuilder.setTitle("알림")

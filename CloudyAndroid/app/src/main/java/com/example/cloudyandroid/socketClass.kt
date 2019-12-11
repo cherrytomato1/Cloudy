@@ -22,7 +22,9 @@ public class socketClass{
 
             val outStream: OutputStream = sock.getOutputStream()
             //val inStream: InputStream = sock.getInputStream()
+            
             sock.close()
+            Log.d("디버그", "socket closed")
             return TRUE
 
         } catch (e: Exception) {

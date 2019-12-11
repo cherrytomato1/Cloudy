@@ -53,11 +53,12 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
             var socketC = socketClass()
             if(socketC.socketConnect(hostIP,PORT)==TRUE)
             {
-                Toast.makeText(applicationContext,"connection success",Toast.LENGTH_SHORT).show()
+                //Toast.makeText(applicationContext,"connection success",Toast.LENGTH_SHORT).show()
+                //스레드가 다른 액티비티에 토스트를 띄울 때 에러 발생
             }
             else {
-                Toast.makeText(applicationContext, "connection fail", Toast.LENGTH_SHORT).show()
-                setResult(Activity.RESULT_CANCELED)
+                //oast.makeText(applicationContext, "connection fail", Toast.LENGTH_SHORT).show()
+                setResult(-1)
             }
 
         }
