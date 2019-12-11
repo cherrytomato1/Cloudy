@@ -27,33 +27,19 @@ import kotlin.coroutines.CoroutineContext
 class MainActivity : AppCompatActivity(){
 
     @SuppressLint("ResourceType")
-
+    var etIP = findViewById<EditText>(R.id.etIp)
+    val PORT = 8080
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var etIP = findViewById<EditText>(R.id.etIp)
-        val PORT = 8080
 
-        val intent = Intent(this,controlActivity::class.java)
-        //호스트 주소 선언 및 임시 주소 할당 (string)
-        // 포트
 
 
         //버튼 클릭 리스너
         btnCnct.setOnClickListener {
-
-            //addr에 에딧 텍스트 값 받기
-            var addr = etIP.text.toString()
-            //inetAddress 형으로 받기
-            var hostIP = InetAddress.getByName(addr)
-
-            intent.putExtra("IP", hostIP)
-            intent.putExtra("PORT", PORT)
-
-            startActivityForResult(intent, 3000)
-
+            call_Activity()
         }
     }
 
@@ -73,6 +59,21 @@ class MainActivity : AppCompatActivity(){
 
                 alertBuilder.show()
             }
+    }
+
+    fun call_Activity(){
+
+        val intent= Intent(this,controlActivity::class.java)
+        
+        //addr에 에딧 텍스트 값 받기
+        var addr = etIP.text.toString()
+        //inetAddress 형으로 받기
+        var hostIP = InetAddress.getByName(addr)
+
+        intent.putExtra("IP", hostIP)
+        intent.putExtra("PORT", PORT)
+
+        startActivityForResult(intent, 3000)
     }
 
     override fun onDestroy() {
