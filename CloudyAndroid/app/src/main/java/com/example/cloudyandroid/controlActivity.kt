@@ -32,11 +32,12 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_control)
+
         mJob = Job()
 
         var socketCrt: Job
 
-
+/*
         socketCrt = launch(Dispatchers.Default) {
             try {
                 Log.d("디버그", "socket init IP : " + hostIP + "PORT : " + PORT)
@@ -56,6 +57,7 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
 
             }
         }
+        */
     }
 
     override fun onDestroy() {

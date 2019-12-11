@@ -27,15 +27,12 @@ import kotlin.coroutines.CoroutineContext
 class MainActivity : AppCompatActivity(){
 
     @SuppressLint("ResourceType")
-    var etIP = findViewById<EditText>(R.id.etIp)
+
     val PORT = 8080
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-
 
         //버튼 클릭 리스너
         btnCnct.setOnClickListener {
@@ -64,6 +61,7 @@ class MainActivity : AppCompatActivity(){
     fun call_Activity(){
 
         val intent= Intent(this,controlActivity::class.java)
+        var etIP =findViewById<EditText>(R.id.etIp)
         
         //addr에 에딧 텍스트 값 받기
         var addr = etIP.text.toString()
