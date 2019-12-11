@@ -1,6 +1,7 @@
 package com.example.cloudyandroid;
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -54,8 +55,10 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
             {
                 Toast.makeText(applicationContext,"connection success",Toast.LENGTH_SHORT).show()
             }
-            else
-                Toast.makeText(applicationContext,"connection fail",Toast.LENGTH_SHORT).show()
+            else {
+                Toast.makeText(applicationContext, "connection fail", Toast.LENGTH_SHORT).show()
+                setResult(Activity.RESULT_CANCELED)
+            }
 
         }
     }

@@ -55,14 +55,14 @@ class MainActivity : AppCompatActivity(){
         controlIntent.putExtra("IP", addr)
         controlIntent.putExtra("PORT", PORT)
 
-        startActivityForResult(intent, 3000)
+        startActivityForResult(controlIntent, 3000)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == 3000)
-            if(resultCode == Activity.RESULT_CANCELED){
+            if(resultCode == Activity.RESULT_FIRST_USER){
                 val alertBuilder = AlertDialog.Builder(ContextThemeWrapper(this@MainActivity,R.style.Theme_AppCompat_Light_Dialog))
 
                 alertBuilder.setTitle("알림")
