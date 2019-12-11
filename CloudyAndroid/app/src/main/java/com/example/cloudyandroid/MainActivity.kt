@@ -1,9 +1,14 @@
 package com.example.cloudyandroid
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.util.Log.d
+import android.view.ContextThemeWrapper
 import android.widget.EditText
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
@@ -19,71 +24,59 @@ import java.util.Calendar.LONG
 import kotlin.coroutines.CoroutineContext
 
 
-class MainActivity : AppCompatActivity(), CoroutineScope {
+class MainActivity : AppCompatActivity(){
 
     @SuppressLint("ResourceType")
-
-    //코루틴 인터페이스 상속 및 추가
-    private lateinit var mJob: Job
-
-    override val coroutineContext: CoroutineContext
-        get() = mJob + Dispatchers.Main
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mJob = Job()
 
-        var Msg = findViewById(R.id.etMsg) as EditText
         var etIP = findViewById<EditText>(R.id.etIp)
+        val PORT = 8080
 
-
+        val intent = Intent(this,controlActivity::class.java)
         //호스트 주소 선언 및 임시 주소 할당 (string)
         // 포트
-        val PORT = 8080
-        var socketCrt: Job
+
 
         //버튼 클릭 리스너
         btnCnct.setOnClickListener {
 
-            //hostIP = Integer.parseInt(etIP.text.toString())
-
             //addr에 에딧 텍스트 값 받기
             var addr = etIP.text.toString()
-            var sendMsg = Msg.text.toString().toByteArray()
-
             //inetAddress 형으로 받기
             var hostIP = InetAddress.getByName(addr)
 
-            var i: Int = 0
-            socketCrt = launch(Dispatchers.Default) {
-                try {
-                    Log.d("디버그", "socket init IP : " + hostIP + "PORT : " + PORT)
-                    val sock = Socket(hostIP, PORT)
-                    Log.d("디버그", "socket connected")
-                    Toast.makeText(applicationContext, "소켓 연결됨", LENGTH_LONG).show()
-                    val outStream: OutputStream = sock.getOutputStream()
-                    //val inStream: InputStream = sock.getInputStream()
+            intent.putExtra("IP", hostIP)
+            intent.putExtra("PORT", PORT)
 
-
-                    outStream.write(sendMsg)
-
-                    sock.close()
-
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Log.e("디버그", e.toString())
-
-                }
-            }
+            startActivityForResult(intent, 3000)
 
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode ==3000)
+            if(resultCode == Activity.RESULT_CANCELED){
+                val alertBuilder = AlertDialog.Builder(ContextThemeWrapper(this@MainActivity,R.style.Theme_AppCompat_Light_Dialog))
+
+                alertBuilder.setTitle("알림")
+                alertBuilder.setMessage("연결 실패")
+
+                alertBuilder.setPositiveButton("확인"){ _, _->
+                    d("alert ok","OK")
+                }
+
+                alertBuilder.show()
+            }
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        mJob.cancel()
     }
 }
