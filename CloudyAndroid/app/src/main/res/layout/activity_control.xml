@@ -9,7 +9,7 @@
             android:id="@+id/btnUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Up"
+            android:text="△"
     />
 
     <Button
@@ -30,7 +30,7 @@
             android:id="@+id/btnDown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Down"
+            android:text="▽"
     />
 
 </LinearLayout>

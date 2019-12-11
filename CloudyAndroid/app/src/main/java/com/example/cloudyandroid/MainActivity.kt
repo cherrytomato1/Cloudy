@@ -40,10 +40,28 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
+
+
+    fun call_Activity(){
+
+        val controlIntent= Intent(this,controlActivity::class.java)
+        var etIP =findViewById<EditText>(R.id.etIp)
+
+        //addr에 에딧 텍스트 값 받기
+        var addr = etIP.text.toString()
+        //inetAddress 형으로 받기
+
+
+        controlIntent.putExtra("IP", addr)
+        controlIntent.putExtra("PORT", PORT)
+
+        startActivityForResult(intent, 3000)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode ==3000)
+        if(requestCode == 3000)
             if(resultCode == Activity.RESULT_CANCELED){
                 val alertBuilder = AlertDialog.Builder(ContextThemeWrapper(this@MainActivity,R.style.Theme_AppCompat_Light_Dialog))
 
@@ -51,27 +69,11 @@ class MainActivity : AppCompatActivity(){
                 alertBuilder.setMessage("연결 실패")
 
                 alertBuilder.setPositiveButton("확인"){ _, _->
-                    d("alert ok","OK")
+                    d("디버그","alertOK")
                 }
 
                 alertBuilder.show()
             }
-    }
-
-    fun call_Activity(){
-
-        val intent= Intent(this,controlActivity::class.java)
-        var etIP =findViewById<EditText>(R.id.etIp)
-        
-        //addr에 에딧 텍스트 값 받기
-        var addr = etIP.text.toString()
-        //inetAddress 형으로 받기
-        var hostIP = InetAddress.getByName(addr)
-
-        intent.putExtra("IP", hostIP)
-        intent.putExtra("PORT", PORT)
-
-        startActivityForResult(intent, 3000)
     }
 
     override fun onDestroy() {
