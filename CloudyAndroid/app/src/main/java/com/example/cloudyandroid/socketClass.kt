@@ -3,6 +3,8 @@ package com.example.cloudyandroid
 import android.util.Log
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_control.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.OutputStream
 import java.lang.Boolean.FALSE
 import java.lang.Boolean.TRUE
@@ -11,20 +13,25 @@ import java.net.Inet4Address
 import java.net.InetAddress
 import java.net.Socket
 
-public class socketClass{
+class socketClass{
+
+    lateinit var sock : Socket
+    lateinit var outStream: OutputStream
 
     //코틀린 함수의 매개변수는 val 형식이므로 형식을 쓸 필요가 없다.
-    public fun socketConnect(IP : InetAddress, PORT : Int) : Boolean{
+
+    fun socketConnect(IP : InetAddress, PORT : Int) : Boolean{
         try {
             Log.d("디버그", "socket init IP : " + IP + "PORT : " + PORT)
-            val sock = Socket(IP, PORT)
+            sock = Socket(IP, PORT)
             Log.d("디버그", "socket connected")
+            outStream= sock.getOutputStream()
 
-            val outStream: OutputStream = sock.getOutputStream()
+            outStream.write("test".toByteArray())
             //val inStream: InputStream = sock.getInputStream()
-            
-            sock.close()
-            Log.d("디버그", "socket closed")
+
+            //sock.close()
+            //Log.d("디버그", "socket closed")
             return TRUE
 
         } catch (e: Exception) {
@@ -34,5 +41,12 @@ public class socketClass{
             return FALSE
 
         }
+    }
+
+    fun socketSend(msg : String){
+        GlobalScope.launch { Log.d("디버그", "outStream")
+            outStream.write(msg.toByteArray())
+        }
+
     }
 }

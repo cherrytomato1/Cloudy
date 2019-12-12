@@ -10,10 +10,7 @@ import android.widget.EditText
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_control.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.OutputStream
 import java.lang.Boolean.TRUE
 import java.lang.Exception
@@ -48,20 +45,27 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
 
 
         var socket: Job
+        val sock = socketClass()
+        //socket = launch(Dispatchers.Default) {
 
-        socket = launch(Dispatchers.Default) {
-            var socketC = socketClass()
-            if(socketC.socketConnect(hostIP,PORT)==TRUE)
+        socket = GlobalScope.launch {
+            if(sock.socketConnect(hostIP,PORT)==TRUE)
             {
                 //Toast.makeText(applicationContext,"connection success",Toast.LENGTH_SHORT).show()
                 //스레드가 다른 액티비티에 토스트를 띄울 때 에러 발생
+                btnFWD.setOnClickListener { sock.socketSend("FORWARD") }
+                btnLEFT.setOnClickListener { sock.socketSend("LEFT") }
+                btnRGT.setOnClickListener { sock.socketSend("RIGHT") }
+                btnBWD.setOnClickListener { sock.socketSend("BACKWARD") }
             }
             else {
                 //oast.makeText(applicationContext, "connection fail", Toast.LENGTH_SHORT).show()
-                setResult(-1)
+                setResult(-1,intent)
+                finish()
             }
-
         }
+
+
     }
 
     override fun onDestroy() {

@@ -6,28 +6,28 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Button
-            android:id="@+id/btnUp"
+            android:id="@+id/btnFWD"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="△"
     />
 
     <Button
-            android:id="@+id/btnLeft"
+            android:id="@+id/btnLEFT"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Left"
     />
 
     <Button
-            android:id="@+id/btnRight"
+            android:id="@+id/btnRGT"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Right"
     />
 
     <Button
-            android:id="@+id/btnDown"
+            android:id="@+id/btnBWD"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="▽"
