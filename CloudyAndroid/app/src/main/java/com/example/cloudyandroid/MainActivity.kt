@@ -61,19 +61,23 @@ class MainActivity : AppCompatActivity(){
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == 3000)
-            if(resultCode == -1){
-                val alertBuilder = AlertDialog.Builder(ContextThemeWrapper(this@MainActivity,R.style.Theme_AppCompat_Light_Dialog))
+        if(requestCode == 3000) {
+            if (resultCode == -1) {
+                val alertBuilder =
+                    AlertDialog.Builder(ContextThemeWrapper(this@MainActivity, R.style.Theme_AppCompat_Light_Dialog))
 
                 alertBuilder.setTitle("알림")
                 alertBuilder.setMessage("연결 실패")
 
-                alertBuilder.setPositiveButton("확인"){ _, _->
-                    d("디버그","alertOK")
+                alertBuilder.setPositiveButton("확인") { _, _ ->
+                    d("디버그", "alertOK")
                 }
 
                 alertBuilder.show()
             }
+
+        }
+
     }
 
     override fun onDestroy() {
