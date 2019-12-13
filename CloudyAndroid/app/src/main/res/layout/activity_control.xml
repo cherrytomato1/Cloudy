@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        android:layout_height="match_parent">
     <LinearLayout
-            android:layout_weight="0.45"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+    android:layout_weight="1.3">
+
+    </LinearLayout>
+    <LinearLayout
+            android:layout_weight="0.75"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         <WebView
+                android:id="@+id/webV"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
+                android:layout_height="match_parent"
+        >
         </WebView>
     </LinearLayout>
     <LinearLayout
-            android:layout_weight="1"
-            android:gravity="left|bottom"
+            android:layout_weight="0.8"
+            android:gravity="center"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -29,17 +36,18 @@
             <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="0.5" />
+                    android:layout_weight="0.57"/>
             <Button
                     android:id="@+id/btnFWD"
                     android:layout_width="60dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/up"
+                    android:layout_height="60dp"
+                    android:background="@drawable/up_button"
+                    android:layout_marginLeft="20dp"
             />
             <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="2.5" />
+                    android:layout_weight="2.5"/>
 
         </LinearLayout>
 
@@ -49,24 +57,25 @@
                 android:layout_height="wrap_content">
             <Button
                     android:id="@+id/btnLEFT"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/left"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/left_button"
+                    android:layout_marginLeft="20dp"
             />
             <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="0.47" />
+                    android:layout_weight="0.47"/>
             <Button
                     android:id="@+id/btnRGT"
-                    android:background="@drawable/right"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:background="@drawable/right_button"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
             />
             <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="1.5" />
+                    android:layout_weight="1.5"/>
         </LinearLayout>
 
         <LinearLayout
@@ -83,17 +92,19 @@
             <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="0.5" />
+                    android:layout_weight="0.57"/>
             <Button
                     android:id="@+id/btnBWD"
                     android:layout_width="60dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/down"
+                    android:layout_height="60dp"
+                    android:background="@drawable/down_button"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="20dp"
             />
             <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="2.5" />
+                    android:layout_weight="2.5"/>
         </LinearLayout>
 
     </LinearLayout>
