@@ -50,9 +50,10 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
         val hostIP = InetAddress.getByName(bundle!!.getString("IP"))
         val PORT = bundle!!.getInt("PORT")
 
-        var webIP = bundle!!.getString("IP")+"8090"
+        var webIP = "http://" + bundle!!.getString("IP")+":8090/?action=stream/"
 
-        webIP = "https://www.naver.com/"
+        //webIP = "http://192.168.0.211:8090/?action=stream/"
+
 
         var wV : WebView = findViewById(R.id.webV)
 
@@ -62,64 +63,105 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
         var checkBTN = 0
         sock = socketClass()
 
+        btnFWD.setOnTouchListener { _: View, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    Log.d("디버그","FWD-DOWN")
+                    checkBTN = 1
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    Log.d("디버그","FWD-UP")
+                    checkBTN = 0
+                    true
+                }
+                MotionEvent.ACTION_CANCEL ->{
+                    Log.d("디버그","FWD-CANCEL")
+                    checkBTN = 0
+                    true
+                }
+                else -> {
+                    true
+                }
+            }
+
+        }
+
+        btnLEFT.setOnTouchListener { _: View, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    Log.d("디버그","LEFT-DOWN")
+                    checkBTN = 3
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    Log.d("디버그","LEFT-UP")
+                    checkBTN = 0
+                    true
+                }
+                MotionEvent.ACTION_CANCEL ->{
+                    Log.d("디버그","LEFT-CANCEL")
+                    checkBTN = 0
+                    true
+                }
+                else -> {
+                    true
+                }
+            }
+
+        }
+        btnRGT.setOnTouchListener { _: View, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    checkBTN = 4
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    Log.d("디버그","RIGHT-UP")
+                    checkBTN = 0
+                    true
+                }
+                MotionEvent.ACTION_CANCEL ->{
+                    Log.d("디버그","RIGHT-CANCEL")
+                    checkBTN = 0
+                    true
+                }
+                else -> {
+                    true
+                }
+            }
+
+        }
+        btnBWD.setOnTouchListener { _: View, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    checkBTN = 2
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    Log.d("디버그","BWD-UP")
+                    checkBTN = 0
+                    true
+                }
+                MotionEvent.ACTION_CANCEL ->{
+                    Log.d("디버그","BWD-CANCEL")
+                    checkBTN = 0
+                    true
+                }
+                else -> {
+                    true
+                }
+            }
+
+        }
 
         //socket = launch(Dispatchers.Default) {
         socket = GlobalScope.launch {
             if (sock.socketConnect(hostIP, PORT) == TRUE) {
                 //Toast.makeText(applicationContext,"connection success",Toast.LENGTH_SHORT).show()
                 //스레드가 다른 액티비티에 토스트를 띄울 때 에러 발생
-                btnFWD.setOnTouchListener { _: View, event ->
-                    when (event.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            checkBTN = 1
-                            true
-                        }
-                        else -> {
-                            checkBTN = 0
-                            true
-                        }
-                    }
 
-                }
-                btnLEFT.setOnTouchListener { _: View, event ->
-                    when (event.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            checkBTN = 3
-                            true
-                        }
-                        else -> {
-                            checkBTN = 0
-                            true
-                        }
-                    }
 
-                }
-                btnRGT.setOnTouchListener { _: View, event ->
-                    when (event.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            checkBTN = 4
-                            true
-                        }
-                        else -> {
-                            checkBTN = 0
-                            true
-                        }
-                    }
-
-                }
-                btnBWD.setOnTouchListener { _: View, event ->
-                    when (event.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            checkBTN = 2
-                            true
-                        }
-                        else -> {
-                            checkBTN = 0
-                            true
-                        }
-                    }
-
-                }
             } else {
                 //oast.makeText(applicationContext, "connection fail", Toast.LENGTH_SHORT).show()
                 setResult(-1, intent)
@@ -128,7 +170,8 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
 
             while (checkBTN != -1) {
                 sock.socketSend(checkBTN.toString())
-                delay(250L)
+                Log.d("디버그","socket sending.. : " + checkBTN)
+                delay(100L)
             }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { WebView.setWebContentsDebuggingEnabled(true) }
