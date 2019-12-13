@@ -26,8 +26,9 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
 
     //코루틴 인터페이스 상속 및 추가
     private lateinit var mJob: Job
+    lateinit var socket : Job
     //lateinit = 선언 이후 초기화
-    lateinit var sock : socketClass
+    lateinit var sock: socketClass
 
 
     override val coroutineContext: CoroutineContext
@@ -47,7 +48,8 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
         val PORT = bundle!!.getInt("PORT")
 
 
-        var socket: Job
+        socket = Job()
+
         var checkBTN = 0
         sock = socketClass()
 
@@ -57,15 +59,55 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
             if (sock.socketConnect(hostIP, PORT) == TRUE) {
                 //Toast.makeText(applicationContext,"connection success",Toast.LENGTH_SHORT).show()
                 //스레드가 다른 액티비티에 토스트를 띄울 때 에러 발생
-                btnFWD.setOnClickListener { sock.socketSend("FORWARD") }
-                btnLEFT.setOnClickListener { sock.socketSend("LEFT") }
-                btnRGT.setOnClickListener { sock.socketSend("RIGHT") }
+                btnFWD.setOnTouchListener { _: View, event ->
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            checkBTN = 1
+                            true
+                        }
+                        else -> {
+                            checkBTN = 0
+                            true
+                        }
+                    }
+
+                }
+                btnLEFT.setOnTouchListener { _: View, event ->
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            checkBTN = 2
+                            true
+                        }
+                        else -> {
+                            checkBTN = 0
+                            true
+                        }
+                    }
+
+                }
+                btnRGT.setOnTouchListener { _: View, event ->
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            checkBTN = 3
+                            true
+                        }
+                        else -> {
+                            checkBTN = 0
+                            true
+                        }
+                    }
+
+                }
                 btnBWD.setOnTouchListener { _: View, event ->
-                    when(event.action){
-                        MotionEvent.ACTION_DOWN -> { checkBTN=4
-                            true }
-                        else    -> { checkBTN= 0
-                        true}
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            checkBTN = 4
+                            true
+                        }
+                        else -> {
+                            checkBTN = 0
+                            true
+                        }
                     }
 
                 }
@@ -74,22 +116,22 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
                 setResult(-1, intent)
                 finish()
             }
-            while(checkBTN!=-1) {
-                sock.socketSend(checkBTN.toString())
-                delay(500L)
-            }
-            sock.sockend()
-        }
 
+            while (checkBTN != -1) {
+                sock.socketSend(checkBTN.toString())
+                delay(100L)
+            }
+        }
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if(GlobalScope.launch { !sock.sock.isClosed }) {
-            Log.d("디버그","socket shut down")
+        if (sock.sockCHECK() == true) {
+            Log.d("디버그", "socket shut down")
             sock.sockend()
         }
+        socket.cancel()
         mJob.cancel()
     }
 }

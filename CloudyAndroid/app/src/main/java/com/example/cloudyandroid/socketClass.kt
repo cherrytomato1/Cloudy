@@ -5,6 +5,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_control.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.io.OutputStream
 import java.lang.Boolean.FALSE
 import java.lang.Boolean.TRUE
@@ -58,11 +59,12 @@ class socketClass {
     }
 
     fun sockCHECK():Boolean{
-        GlobalScope.launch {
+        return runBlocking {
             Log.d("디버그","socket check")
-            if(sock.isClosed)
-                return@launch
-            true
+            when(sock.isClosed) {
+                true ->false
+                else -> true
+            }
         }
     }
 }
