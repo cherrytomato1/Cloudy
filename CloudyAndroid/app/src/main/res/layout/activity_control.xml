@@ -10,10 +10,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         <WebView
+                android:id="@+id/webV"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/webV">
-
+                android:layout_height="fill_parent">
         </WebView>
     </LinearLayout>
     <LinearLayout
@@ -35,7 +34,8 @@
                     android:id="@+id/btnFWD"
                     android:layout_width="60dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/up"
+                    android:background="@drawable/up_button"
+                    android:layout_marginLeft="20dp"
             />
             <View
                     android:layout_width="0dp"
@@ -52,7 +52,8 @@
                     android:id="@+id/btnLEFT"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/left"
+                    android:background="@drawable/left_button"
+                    android:layout_marginLeft="20dp"
             />
             <View
                     android:layout_width="0dp"
@@ -60,7 +61,7 @@
                     android:layout_weight="0.47" />
             <Button
                     android:id="@+id/btnRGT"
-                    android:background="@drawable/right"
+                    android:background="@drawable/right_button"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
             />
@@ -89,7 +90,9 @@
                     android:id="@+id/btnBWD"
                     android:layout_width="60dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/down"
+                    android:background="@drawable/down_button"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="20dp"
             />
             <View
                     android:layout_width="0dp"
