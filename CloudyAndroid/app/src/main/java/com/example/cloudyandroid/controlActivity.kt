@@ -3,11 +3,14 @@ package com.example.cloudyandroid;
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.EditText
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_control.*
@@ -47,6 +50,12 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
         val hostIP = InetAddress.getByName(bundle!!.getString("IP"))
         val PORT = bundle!!.getInt("PORT")
 
+        var webIP = bundle!!.getString("IP")+"8090"
+
+        webIP = "https://www.naver.com/"
+
+        var wV : WebView = findViewById(R.id.webV)
+
 
         socket = Job()
 
@@ -75,7 +84,7 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
                 btnLEFT.setOnTouchListener { _: View, event ->
                     when (event.action) {
                         MotionEvent.ACTION_DOWN -> {
-                            checkBTN = 2
+                            checkBTN = 3
                             true
                         }
                         else -> {
@@ -88,7 +97,7 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
                 btnRGT.setOnTouchListener { _: View, event ->
                     when (event.action) {
                         MotionEvent.ACTION_DOWN -> {
-                            checkBTN = 3
+                            checkBTN = 4
                             true
                         }
                         else -> {
@@ -101,7 +110,7 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
                 btnBWD.setOnTouchListener { _: View, event ->
                     when (event.action) {
                         MotionEvent.ACTION_DOWN -> {
-                            checkBTN = 4
+                            checkBTN = 2
                             true
                         }
                         else -> {
@@ -119,10 +128,16 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
 
             while (checkBTN != -1) {
                 sock.socketSend(checkBTN.toString())
-                delay(100L)
+                delay(250L)
             }
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { WebView.setWebContentsDebuggingEnabled(true) }
 
+        wV.webViewClient = WebViewClient()
+        wV.settings.javaScriptEnabled = true
+        wV.settings.loadWithOverviewMode = true
+
+        wV.loadUrl(webIP)
     }
 
     override fun onDestroy() {
