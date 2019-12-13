@@ -71,25 +71,26 @@ def setcar(stat):
     if(stat=="FORWARD"):
         setMotor(CH1, 100, FORWARD)
         setMotor(CH2, 100, FORWARD)
-        sleep(t)
-        setMotor(CH1, 0, STOP)
-        setMotor(CH2, 0, STOP)
+        #sleep(t)
+        #setMotor(CH1, 0, STOP)
+        #setMotor(CH2, 0, STOP)
     elif(stat=="BACKWARD"):
         setMotor(CH1, 100, BACKWORD)
         setMotor(CH2, 100, BACKWORD)
-        sleep(t)
-        setMotor(CH1, 0, STOP)
-        setMotor(CH2, 0, STOP)
+        #sleep(t)
+        #setMotor(CH1, 0, STOP)
+        #setMotor(CH2, 0, STOP)
     elif(stat=="RIGHT"):
         setMotor(CH1, 100, BACKWORD)
         setMotor(CH2, 100, FORWARD)
-        sleep(t)
-        setMotor(CH1, 0, STOP)
-        setMotor(CH2, 0, STOP)
+        #sleep(t)
+        #setMotor(CH1, 0, STOP)
+        #setMotor(CH2, 0, STOP)
     elif(stat=="LEFT"):
         setMotor(CH1, 100, FORWARD)
         setMotor(CH2, 100, BACKWORD)
-        sleep(t)
+        #sleep(t)
+    elif(stat=="STOP"):
         setMotor(CH1, 0, STOP)
         setMotor(CH2, 0, STOP)
         

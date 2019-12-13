@@ -6,7 +6,7 @@ from car import *
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 t=1
-HOST = "192.168.0.15"
+HOST = "192.168.0.211"
 PORT = 8080
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print ('Socket created')
@@ -24,6 +24,8 @@ def do_some_stuffs_with_input(input_string):
         input_string = "LEFT"
     elif input_string == "4":
         input_string = "RIGHT"
+    elif input_string == "0":
+        input_string = "STOP"
     else :
         input_string = input_string + ""
     return input_string
