@@ -93,6 +93,13 @@ def setcar(stat):
     elif(stat=="STOP"):
         setMotor(CH1, 0, STOP)
         setMotor(CH2, 0, STOP)
+    elif(stat=="R_FORWARD"):
+        setMotor(CH1, 50, FORWARD)
+        setMotor(CH2, 100, FORWARD)
+        #sleep(t)
+    elif(stat=="L_FORWARD"):
+        setMotor(CH1, 100, FORWARD)
+        setMotor(CH2, 50, FORWARD)
         
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)          
