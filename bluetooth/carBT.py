@@ -11,6 +11,10 @@ def do_some_stuffs_with_input(input_string):
         input_string = "LEFT"
     elif input_string == "4":
         input_string = "RIGHT"
+    elif input_string == "5":
+        input_string = "L_FORWARD"
+    elif input_string == "6":
+        input_string = "R_FORWARD"
     else :
         input_string = input_string + ""
     return input_string
