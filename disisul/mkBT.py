@@ -1,4 +1,18 @@
 from bluetooth import *
+from car from *
+
+def do_some_stuffs_with_input(input_string):
+    if input_string == "1":
+        input_string = "FORWARD"
+    elif input_string == "2":
+        input_string = "BACKWARD"
+    elif input_string == "3":
+        input_string = "LEFT"
+    elif input_string == "4":
+        input_string = "RIGHT"
+    else :
+        input_string = input_string + ""
+    return input_string
 
 client_socket=BluetoothSocket(RFCOMM)
 
@@ -7,6 +21,8 @@ print("bluetooth connected!")
 
 while True:
     msg = client_socket.recv(1024)
+    res = do_some_stuffs_with_input(msg)
+    setcar(res)
     print("recived message : {}".format(msg))
 
 print("Finished")
