@@ -76,13 +76,13 @@ def setcar(stat):
         #setMotor(CH2, 0, STOP)
     elif(stat=="BACKWARD"):
         setMotor(CH1, 100, BACKWORD)
-        setMotor(CH2, 100, BACKWORD)
+        setMotor(CH2, 50, BACKWORD)
         #sleep(t)
         #setMotor(CH1, 0, STOP)
         #setMotor(CH2, 0, STOP)
     elif(stat=="RIGHT"):
         setMotor(CH1, 100, BACKWORD)
-        setMotor(CH2, 100, FORWARD)
+        setMotor(CH2, 50, FORWARD)
         #sleep(t)
         #setMotor(CH1, 0, STOP)
         #setMotor(CH2, 0, STOP)

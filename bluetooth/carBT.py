@@ -1,8 +1,10 @@
 
 from bluetooth import *
-from car from *
+from car import *
 
 def do_some_stuffs_with_input(input_string):
+    if input_string == "0":
+        input_string = "STOP"
     if input_string == "1":
         input_string = "FORWARD"
     elif input_string == "2":
