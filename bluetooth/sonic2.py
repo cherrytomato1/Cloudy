@@ -4,13 +4,25 @@ import time
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
-
+so = 0
 trig = 12
 echo = 26
 
 GPIO.setup(trig, GPIO.OUT)
 GPIO.setup(echo, GPIO.IN)
-
+def sendsonic(dis):
+    so = 0
+    if dis < 5:
+        so = 1
+    elif 5 <= dis < 10:
+        so = 2
+    elif 10 <= dis < 15:
+        so = 3
+    elif 15 <= dis < 20:
+        so = 4
+    elif 20 <= dis < 25:
+        so = 5
+    return so
 try:
     while True:
         GPIO.output(trig, False) # trig핀 low로 유지

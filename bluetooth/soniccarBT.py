@@ -2,7 +2,7 @@
 from bluetooth import *
 from car import *
 from sonic2 import *
-
+so=0
 def do_some_stuffs_with_input(input_string):
     if input_string == "0":
         input_string = "STOP"
@@ -33,7 +33,9 @@ while True:
     setcar(res)
     print("recived message : {}".format(msg))
     print("Distance : ", distance, "cm")
-    client_socket.send(distance)
+    print(sendsonic(distance))
+    client_socket.send(sendsonic(distance))
+    
 
 print("Finished")
 client_socket.close()
