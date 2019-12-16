@@ -1,8 +1,9 @@
 
 from bluetooth import *
-from car import *
 from sonic2 import *
-so=0
+from car import *
+
+
 def do_some_stuffs_with_input(input_string):
     if input_string == "0":
         input_string = "STOP"
@@ -18,6 +19,10 @@ def do_some_stuffs_with_input(input_string):
         input_string = "L_FORWARD"
     elif input_string == "6":
         input_string = "R_FORWARD"
+    elif input_string == "7":
+        input_string = "L_BACKWARD"
+    elif input_string == "8":
+        input_string = "R_BACKWARD"
     else :
         input_string = input_string + ""
     return input_string
@@ -28,13 +33,14 @@ client_socket.connect(("98:D3:41:FD:4F:78", 1))
 print("bluetooth connected!")
 
 while True:
+    presonic()
     msg = client_socket.recv(1024)
     res = do_some_stuffs_with_input(msg)
     setcar(res)
+    
     print("recived message : {}".format(msg))
-    print("Distance : ", distance, "cm")
-    print(sendsonic(distance))
-    client_socket.send(sendsonic(distance))
+    #printsonic(msg)
+    client_socket.send(format(printsonic()))
     
 
 print("Finished")

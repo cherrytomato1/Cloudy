@@ -5,7 +5,7 @@ from car import *
 def do_some_stuffs_with_input(input_string):
     if input_string == "0":
         input_string = "STOP"
-    if input_string == "1":
+    elif input_string == "1":
         input_string = "FORWARD"
     elif input_string == "2":
         input_string = "BACKWARD"
@@ -17,6 +17,10 @@ def do_some_stuffs_with_input(input_string):
         input_string = "L_FORWARD"
     elif input_string == "6":
         input_string = "R_FORWARD"
+    elif input_string == "7":
+        input_string = "L_BACKWARD"
+    elif input_string == "8":
+        input_string = "R_BACKWARD"
     else :
         input_string = input_string + ""
     return input_string
