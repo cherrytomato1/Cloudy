@@ -7,7 +7,7 @@ from time import sleep          # time 모듈의 sleep()함수 사용
 # 모터 상태
 STOP  = 0
 FORWARD  = 1
-BACKWORD = 2
+BACKWARD = 2
 RIGHT = 3
 LEFT = 4
 
