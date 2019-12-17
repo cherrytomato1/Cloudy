@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import socket               # sockect 모듈 import
 import RPi.GPIO as GPIO     # GPIO 모듈 import
 from time import sleep      # time 모듈의 sleep() 함수 사용
@@ -9,7 +10,8 @@ from car import *           # car 모듈의 모든 함수 사용
 GPIO.setmode(GPIO.BCM)      # 라즈베리파이의 핀모드를 BCM 모드로 설정
 GPIO.setwarnings(False)     # 오류 방지
 
-HOST = "192.168.0.211"      # 소켓 통신 IP 지정
+HOST = os.popen('ip addr show wlan0 | grep "\<inet\>" | awk \'{ print $2 }\' | awk -F "/" \'{ print $1 }\'').read().strip()
+                            # 소켓 통신 IP 지정(wlan0 자동으로 가져오기)
 PORT = 8080                 # 소켓 통신 PORT 지정
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)       # 소켓 객체 생성
 print ('Socket created')                                    # 소켓 생성 시 출력문
