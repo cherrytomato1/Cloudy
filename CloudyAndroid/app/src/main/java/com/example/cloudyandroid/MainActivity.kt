@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity(){
 
     @SuppressLint("ResourceType")
 
+    //소켓 통신용 포트 설정
     val PORT = 8080
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity(){
 
         //버튼 클릭 리스너
         btnCnct.setOnClickListener {
+            //새 인텐트 call 함수
             call_Activity()
         }
     }
@@ -43,29 +45,31 @@ class MainActivity : AppCompatActivity(){
 
 
     fun call_Activity(){
-
+        //새 인텐트 정의
         val controlIntent= Intent(this,controlActivity::class.java)
+        //사용할 IP가 적힌 edittext 정의
         var etIP =findViewById<EditText>(R.id.etIp)
 
         //addr에 에딧 텍스트 값 받기
         var addr = etIP.text.toString()
         //inetAddress 형으로 받기
 
-
+        //intent로 IP, PORT 넘김
         controlIntent.putExtra("IP", addr)
         controlIntent.putExtra("PORT", PORT)
-
+        //Intent 시작
         startActivityForResult(controlIntent, 3000)
     }
-
+    //인텐트 리턴 함수
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == 3000) {
+            //오류일 경우
             if (resultCode == -1) {
                 val alertBuilder =
                     AlertDialog.Builder(ContextThemeWrapper(this@MainActivity, R.style.Theme_AppCompat_Light_Dialog))
-
+                //연결실패 박스 띄움
                 alertBuilder.setTitle("알림")
                 alertBuilder.setMessage("연결 실패")
 
