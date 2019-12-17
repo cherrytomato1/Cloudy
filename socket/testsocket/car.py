@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import RPi.GPIO as GPIO         # GPIO 모듈을 import
 from time import sleep          # time 모듈의 sleep()함수 사용
 
