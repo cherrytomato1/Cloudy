@@ -61,9 +61,10 @@ def setMotorContorl(pwm, INA, INB, speed, stat):        # 모터 제어 함수
         
 def setMotor(ch, speed, stat):                          # 모터 제어 함수를 간단하게 사용
     if ch == CH1:                                       # 오른쪽 바퀴
+        speed = speed * 0.9 
         setMotorContorl(pwmA, IN1, IN2, speed, stat)    # 모터 동작
     else:                                               # 왼쪽 바퀴
-        speed = speed * 0.9
+        
         setMotorContorl(pwmB, IN3, IN4, speed, stat)    # 모터 동작
   
 def setcar(stat):                                       # 소켓 통신에 사용하는 모터 제어 함수
