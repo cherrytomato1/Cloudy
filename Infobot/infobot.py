@@ -6,7 +6,7 @@ import socket               # sockect 모듈 import
 import setDir
 import RPi.GPIO as GPIO     # GPIO 모듈 import
 from time import sleep      # time 모듈의 sleep() 함수 사용
-from car import *           # car 모듈의 모든 함수 사용
+from motor import *           # car 모듈의 모든 함수 사용
 
 STOP = 0
 FORWARD = 1
