@@ -29,3 +29,22 @@ def setDir():
         res = 3
     
     return res
+    
+def setDirTest():
+
+    time.sleep(0.1)
+    
+    
+    
+    SS1 = printsonic(1)
+    
+    
+    res = 0
+    
+    if SS1 == 0 :
+        res = 1
+    
+    else
+        res = 3
+    
+    return res

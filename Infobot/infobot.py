@@ -14,8 +14,8 @@ BACKWARD = 2
 LEFT = 3
 RIGHT = 4
 
-GPIO.setmode(GPIO.BCM)      # 라즈베리파이의 핀모드를 BCM 모드로 설정
-GPIO.setwarnings(False)     # 오류 방지
+
+presonic()
 
 print ('HI')                              # 소켓 리스닝 시 출력문
 
@@ -23,7 +23,7 @@ while True:                                                 # 무한 루프
 
 #        th=threading.Thread(target=setDir, args=())
 #        th.start()
-        drct=setDir()
+        drct=setDir2()
         
         setcar(drct)                                         # 변환된 데이터에 따라 모터 동작
             
