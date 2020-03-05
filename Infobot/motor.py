@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 from time import sleep
 STOP  = 0
 FORWARD  = 1
-BACKWORD = 2
+BACKWARD = 2
 RIGHT = 3
 LEFT = 4
 
