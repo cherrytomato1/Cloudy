@@ -29,6 +29,6 @@ while True:                                                 # 무한 루프
         
         setcar(drct)                                         # 변환된 데이터에 따라 모터 동작
             
-        print("pi :" + drct)                                 # 어떤 동작을 하는지 출력
+        print("pi :" ,drct)                                 # 어떤 동작을 하는지 출력
         
 GPIO.cleanup()                                              # GPIO 모듈의 점유 리소스 해제

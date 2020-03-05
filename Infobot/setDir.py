@@ -11,7 +11,7 @@ def setDir():
     SS2 = printsonic(2)
     SS3 = printsonic(3)
     
-    print("SS1 = "+SS1 +"SS2 = "+SS2 +"SS3 = " +SS3)
+    print("SS1 = ",SS1 ,"SS2 = ",SS2 ,"SS3 = " ,SS3)
     
     res = 0
     
