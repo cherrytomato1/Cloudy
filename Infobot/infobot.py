@@ -27,7 +27,7 @@ while True:                                                 # 무한 루프
 #        th.start()
         drct=setDirTest()
         
-        setcar(drct)                                         # 변환된 데이터에 따라 모터 동작
+        motor(drct)                                         # 변환된 데이터에 따라 모터 동작
             
         print("pi :" ,drct)                                 # 어떤 동작을 하는지 출력
         

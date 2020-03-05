@@ -65,31 +65,31 @@ def setMotor(ch, speed, stat):
     else:
         setMotorContorl(pwmB, IN3, IN4, speed, stat)
   
-def setcar(stat):
+def motor(stat):
     t=0.2
-    if(stat=="FORWARD"):
+    if(stat==FORWARD):
         setMotor(CH1, 100, FORWARD)
         setMotor(CH2, 100, FORWARD)
         #sleep(t)
         #setMotor(CH1, 0, STOP)
         #setMotor(CH2, 0, STOP)
-    elif(stat=="BACKWARD"):
+    elif(stat==BACKWARD):
         setMotor(CH1, 90, BACKWORD)
         setMotor(CH2, 70, BACKWORD)
         #sleep(t)
         #setMotor(CH1, 0, STOP)
         #setMotor(CH2, 0, STOP)
-    elif(stat=="RIGHT"):
+    elif(stat==RIGHT):
         setMotor(CH1, 100, BACKWORD)
         setMotor(CH2, 100, FORWARD)
         #sleep(t)
         #setMotor(CH1, 0, STOP)
         #setMotor(CH2, 0, STOP)
-    elif(stat=="LEFT"):
+    elif(stat==LEFT):
         setMotor(CH1, 100, FORWARD)
         setMotor(CH2, 100, BACKWORD)
         #sleep(t)
-    elif(stat=="STOP"):
+    elif(stat==STOP):
         setMotor(CH1, 0, STOP)
         setMotor(CH2, 0, STOP)
     elif(stat=="R_FORWARD"):
