@@ -1,41 +1,31 @@
 #-*- coding: utf-8 -*-
 import RPi.GPIO as GPIO
 import time
+import sys
 
+SONIC_COUNT = 3
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
-so = 0
-trig = 12
-echo = 26
 
-GPIO.setup(trig, GPIO.OUT)
-GPIO.setup(echo, GPIO.IN)
-def sendsonic(dis):
-    so = 0
-    if dis < 8:
-        so = 1
-    elif 8 <= dis < 16:
-        so = 2
-    elif 16 <= dis < 24:
-        so = 3
-    elif 24 <= dis < 32:
-        so = 4
-    elif 32 <= dis:
-        so = 5
-    return so
+SS = {
+    'SS1': {"trig": 12, "echo": 26},
+    'SS2': {"trig": 12, "echo": 26},
+    'SS3': {"trig": 12, "echo": 26}
+}
 def presonic():
-    GPIO.setup(trig, GPIO.OUT)
-    GPIO.setup(echo, GPIO.IN)
-    GPIO.output(trig, False) # trig핀 low로 유지
+    for i in range(1, SONIC_COUNT + 1):
+        GPIO.setup(SS['SS{}'.format(i)]["trig"], GPIO.OUT)
+        GPIO.setup(SS['SS{}'.format(i)]["echo"], GPIO.IN)
+        GPIO.output(SS['SS{}'.format(i)]["trig"], False) # trig핀 low로 유지
 
-def printsonic():
-
-
-    GPIO.output(trig, False) # trig핀 low로 유지
-
-                  
-                ## trig핀 high로 만들어서 초음파 보냄. 10ms동안 유지
-    GPIO.output(trig, True)
+def printsonic(num):  # 인자에 1~3 숫자 넣기 (1 -> 1번 센서)
+    if num:
+        trig = SS['SS{}'.format(num)]["trig"]
+        echo = SS['SS{}'.format(num)]["echo"]
+    elif not num or str(type(num)) != "<class 'int'>": # 인자에 1~3이 아닌거 썼을때 나가버림
+        return sys.exit()
+    GPIO.output(trig, False) # trig핀 low로 유지                                            
+    GPIO.output(trig, True)  # trig핀 high로 만들어서 초음파 보냄. 10ms동안 유지
     time.sleep(0.000001)
     GPIO.output(trig, False)
                   
@@ -49,10 +39,10 @@ def printsonic():
     distance = pulse_duration * 17000
     distance = round(distance, 2)
                  ##소수점 둘째자리까지
+    if distance >= 10:
+        distance = 0;
             
-    print("Distance : ", distance, "cm")
-    print("send : ",sendsonic(distance))
-    return sendsonic(distance)      
+    return distance      
       
 
 GPIO.cleanup()
