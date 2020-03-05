@@ -1,4 +1,4 @@
-import sonic
+from sonic import *
 import time
 
 def setDir():
@@ -18,14 +18,14 @@ def setDir():
     if SS1+SS2+SS3 == 0 :
         res = 1
     
-    else if SS2 <=5 and SS2!=0 :
+    elif SS2 <=5 and SS2!=0 :
         if SS3 <=5 and SS2!=0 :
             res = 3
         else :
             res = 4
-    else if SS1 <=5 and SS1!=0 :
+    elif SS1 <=5 and SS1!=0 :
         res = 4
-    else if SS3 <=5 and SS3!=0 :
+    elif SS3 <=5 and SS3!=0 :
         res = 3
     
     return res
