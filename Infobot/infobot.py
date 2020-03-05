@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import os
-import setDir
 import RPi.GPIO as GPIO     # GPIO 모듈 import
 import threading
+
+from setDir import *
 from sonic import *
 from time import sleep      # time 모듈의 sleep() 함수 사용
 from motor import *           # car 모듈의 모든 함수 사용
