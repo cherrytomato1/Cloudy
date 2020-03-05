@@ -41,7 +41,7 @@ def printsonic(num):  # 인자에 1~3 숫자 넣기 (1 -> 1번 센서)
                  ##소수점 둘째자리까지
     if distance >= 20:
         distance = 0;
-            
+    print("dis : ",distance)
     return distance      
       
 

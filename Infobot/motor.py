@@ -68,8 +68,8 @@ def setMotor(ch, speed, stat):
 def motor(stat):
     t=0.2
     if(stat==FORWARD):
-        setMotor(CH1, 50, FORWARD)
-        setMotor(CH2, 50, FORWARD)
+        setMotor(CH1, 70, FORWARD)
+        setMotor(CH2, 70, FORWARD)
         #sleep(t)
         #setMotor(CH1, 0, STOP)
         #setMotor(CH2, 0, STOP)
