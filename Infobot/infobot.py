@@ -23,7 +23,7 @@ while True:                                                 # 무한 루프
 
 #        th=threading.Thread(target=setDir, args=())
 #        th.start()
-        drct=setDir2()
+        drct=setDirTest()
         
         setcar(drct)                                         # 변환된 데이터에 따라 모터 동작
             

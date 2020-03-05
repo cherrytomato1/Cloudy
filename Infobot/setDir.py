@@ -44,7 +44,7 @@ def setDirTest():
     if SS1 == 0 :
         res = 1
     
-    else
+    else :
         res = 3
     
     return res
