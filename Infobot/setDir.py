@@ -38,7 +38,7 @@ def setDirTest():
     
     SS1 = printsonic(1)
     
-    
+    print("SS1",SS1)
     res = 0
     
     if SS1 == 0 :
