@@ -60,17 +60,39 @@ int front_stay_time = 1; // 전방 감지 시간
 int uturn_delay = 1500;
 int turn_delay = 175; // 65
 int delayy = 1500;
-/*
-void serial_data() {
+
+int serial_data() {
   if(Serial.available()) {
     data = Serial.read();
     input_data = data - 48;
   }
   return input_data;
 }
+
 void control_bot() {
   setMotor(serial_data(), 0, 0);
-}*/
+}
+int turn_dir(int data) {
+  int dir;
+  if(data < 0) {
+    dir = LEFT_TURN; 
+  }
+  else if(data > 0) {
+    dir = RIGHT_TURN;
+  }
+  return dir;
+}
+void cloudy_bot() {
+  int value = abs(10);
+  int recv_data = serial.data();
+  int turn_dir = turn_dir(recv_data);
+  if(recv_data < value) {
+    Advoid_Obstacles();
+  }
+  else {
+    setMotor(turn_dir, fast, 0);
+  }
+}
 void setSpeed(int spd) {
   analogWrite(RIGHT_PWM, spd);
   analogWrite(LEFT_PWM, spd);
