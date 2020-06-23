@@ -49,8 +49,15 @@ int slow = 100;
 int fast = 200;
 
 // 시리얼 통신 변수 선언
-int data;
-int input_data;
+char data;
+char input_data;
+int value; 
+int recv_data;
+int turn_dir;
+
+int ctrl;     //controll, ㅈㅔ어정보
+int pos;      //position, 좌표정보
+int boxSize;  //boxSize 
 
 int detection_distance = 15;
 int side_detection_distance = 8;
@@ -72,7 +79,7 @@ int serial_data() {
 void control_bot() {
   setMotor(serial_data(), 0, 0);
 }
-int turn_dir(int data) {
+int rotation_dir(int data) {
   int dir;
   if(data < 0) {
     dir = LEFT_TURN; 
@@ -83,10 +90,15 @@ int turn_dir(int data) {
   return dir;
 }
 void cloudy_bot() {
-  int value = abs(10);
-  int recv_data = serial.data();
-  int turn_dir = turn_dir(recv_data);
-  if(recv_data < value) {
+  value = abs(10);
+  recv_data = Serial.parseInt();
+
+  ctrl = recv_data/10000;
+  boxSize = recv_data%10000 / 1000;
+  pos = (boxSize%1000)-500;
+
+  turn_dir = rotation_dir(pos);
+  if(abs(pos) < value) {
     Advoid_Obstacles();
   }
   else {
@@ -329,7 +341,7 @@ void loop() {
   cur_time = millis();
   if(cur_time - pre_time >= mtime) { // 50ms 마다 초음파 측정
     Read_distance();
-    Advoid_Obstacles();
+    cloudy_bot();
     pre_time = cur_time;
     //ShowDistance();   
   }
