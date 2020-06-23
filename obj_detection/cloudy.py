@@ -14,7 +14,7 @@ number = 10                            # 소켓 통신 IP 지정(wlan0 자동으
 PORT = 8080                 # 소켓 통신 PORT 지정
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)       # 소켓 객체 생성
 
-ser = serial.Serial('/dev/ttyACM0')
+ser = serial.Serial('/dev/ttyACM1')
 print("START!!")
 
 print ('Socket created')                                    # 소켓 생성 시 출력문
@@ -27,12 +27,20 @@ while True:                                                 # 무한 루프
     conn, addr = s.accept()                                 # Client에서 연결 요청이 들어올 경우 연결 수락
     print("Connected by ", addr)                            # 연결된 Client의 addr 출력         
     while True:                                             # 무한 루프
-        data = conn.recv(1024)                              # Client에서 받은 데이터를 data변수에 저장
-        data = data.decode("utf8").strip()
-        if not data: break                                  # 데이터 수신이 안되는 경우 무한 루프를 벗어남
-        ser.write(data)
-        ser.write("HI")
-        print("Received: " + data)                          # 받은 데이터 출력
+       boxsize='1'
+       boxpoint='100'
+       data = conn.recv(1024)                              # Client에서 받은 데이터를 data변수에 저장
+       data = data.decode("utf8").strip()
+       
+       if data == '5':
+        state='1'
+        data = state+boxsize+boxpoint
+           
+       if not data: break                                  # 데이터 수신이 안되는 경우 무한 루프를 벗어남
+       ser.write(data.encode('utf-8'))
+        #ser.write(data)
+        #ser.write("HI")
+       print("Received: " + data)                          # 받은 데이터 출력
         
     conn.close()                                            # 연결 끊기
 s.close()                                                   # 소켓 종료
