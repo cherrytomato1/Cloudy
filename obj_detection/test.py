@@ -1,8 +1,8 @@
 import obj_detection as dtct
 #import cloudy as cldy
 while True :
-    x, size = dtct.obj_dtct()
+    pos, size = dtct.obj_dtct()
 
-    print(x,size)
+    print(pos,size)
 dtct.stop_dtct()
 

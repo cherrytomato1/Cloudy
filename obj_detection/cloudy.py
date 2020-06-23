@@ -3,7 +3,7 @@
 import serial           #시리얼 통신
 import os
 import socket               # sockect 모듈 import
-import RPi.GPIO as GPIO     # GPIO 모듈 import
+#import RPi.GPIO as GPIO     # GPIO 모듈 import
 from time import sleep      # time 모듈의 sleep() 함수 사용
 
 GPIO.setmode(GPIO.BCM)      # 라즈베리파이의 핀모드를 BCM 모드로 설정
