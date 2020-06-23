@@ -16,7 +16,8 @@
 #define RIGHT 2
 #define LEFT 3
 #define BACK 4
-#define TURN 5
+#define LEFT_TURN 5
+#define RIGHT_TURN 6
 
 // 초음파 측정 최대 거리: PulseIn함수에서 측정거리 over될 시 0을 반환
 #define DIST_MAX 100 // DIST_MAX값까지만 측정 그 외에는 물체가 없다고 본다.
@@ -44,8 +45,12 @@ unsigned long  distance_R;
 const float alpha = 0.90;
 const float beta = (1 - alpha);
 
-int slow = 75;
-int fast = 150;
+int slow = 100;
+int fast = 200;
+
+// 시리얼 통신 변수 선언
+int data;
+int input_data;
 
 int detection_distance = 15;
 int side_detection_distance = 8;
@@ -56,6 +61,38 @@ int uturn_delay = 1500;
 int turn_delay = 175; // 65
 int delayy = 1500;
 
+int serial_data() {
+  if(Serial.available()) {
+    data = Serial.read();
+    input_data = data - 48;
+  }
+  return input_data;
+}
+
+void control_bot() {
+  setMotor(serial_data(), 0, 0);
+}
+int turn_dir(int data) {
+  int dir;
+  if(data < 0) {
+    dir = LEFT_TURN; 
+  }
+  else if(data > 0) {
+    dir = RIGHT_TURN;
+  }
+  return dir;
+}
+void cloudy_bot() {
+  int value = abs(10);
+  int recv_data = serial.data();
+  int turn_dir = turn_dir(recv_data);
+  if(recv_data < value) {
+    Advoid_Obstacles();
+  }
+  else {
+    setMotor(turn_dir, fast, 0);
+  }
+}
 void setSpeed(int spd) {
   analogWrite(RIGHT_PWM, spd);
   analogWrite(LEFT_PWM, spd);
@@ -76,14 +113,21 @@ void stop() {
   digitalWrite(BACK_A, LOW);
   digitalWrite(BACK_B, LOW);
 }
-void turn() {
+void left_turn() {
   digitalWrite(RIGHT_A, HIGH);
   digitalWrite(RIGHT_B, LOW);
   digitalWrite(LEFT_A, HIGH);
   digitalWrite(LEFT_B, LOW);
   digitalWrite(BACK_A, LOW);
   digitalWrite(BACK_B, HIGH);
- // Serial.println("TURN");
+}
+void right_turn() {
+  digitalWrite(RIGHT_A, LOW);
+  digitalWrite(RIGHT_B, HIGH);
+  digitalWrite(LEFT_A, LOW);
+  digitalWrite(LEFT_B, HIGH);
+  digitalWrite(BACK_A, HIGH);
+  digitalWrite(BACK_B, LOW);
 }
 void forward() {
   digitalWrite(RIGHT_A, HIGH);
@@ -153,7 +197,12 @@ void setMotor(int dir, int spd, int dur) {
   }
   else if(dir == 5) {
     setSpeed(spd);
-    turn();
+    left_turn();
+    duration(dur);
+  }
+  else if(dir == 6) {
+    setSpeed(spd);
+    right_turn();
     duration(dur);
   }
 }
@@ -234,7 +283,7 @@ void Advoid_Obstacles() {
     if(front_check >= front_stay_time) {
       if(distance_L <= side_detection_distance2 && distance_R <= side_detection_distance2) {
         Serial.println("U-TURN2");
-        setMotor(TURN, fast, uturn_delay);
+        setMotor(RIGHT_TURN, fast, uturn_delay);
       }
       else if(distance_R <= detection_distance) {
         Serial.println("LEFT2");
@@ -284,7 +333,7 @@ void loop() {
     pre_time = cur_time;
     //ShowDistance();   
   }
-  //setMotor(TURN, fast, 0);
+  
   /*setMotor(FORWARD, fast, 0);
   delay(delayy);
   setMotor(BACK, fast, 0);
