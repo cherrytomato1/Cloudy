@@ -24,8 +24,6 @@
 #define DIST_MIN 2 // 측정 최소 거리 지정
 #define DIST_S (DIST_MAX *58.2) //초음파센서 타임아웃 설정 (최대거리)
 
-#define maxBufRead 5
-
 int trig[3] = {34, 36, 42}; // 좌측, 정면, 우측
 int echo[3] = {32, 38, 40};
 
@@ -49,23 +47,17 @@ const float beta = (1 - alpha);
 
 int slow = 100;
 int fast = 200;
-int i;
+
 // 시리얼 통신 변수 선언
 char data;
 char input_data;
 int value; 
-long recv_data;
+int recv_data;
 int turn_dir;
-String strr;
 
 int ctrl;     //controll, ㅈㅔ어정보
 int pos;      //position, 좌표정보
 int boxSize;  //boxSize 
-
-char buffer[20];
-char bufferIndex=0;
-
-int intBuffer;
 
 int detection_distance = 15;
 int side_detection_distance = 8;
@@ -99,88 +91,21 @@ int rotation_dir(int data) {
 }
 void cloudy_bot() {
   value = abs(10);
-  //Serial.println("hyo");
-  //Serial.print("available:");
-  //Serial.println(Serial.available());
-  /*if(Serial.available() == 5) {
-    char inp_data[5];
-    for(i=0;i<5;i++){
-      inp_data[i] = Serial.read();
-    }    
-   
-    Serial.println(inp_data);
-    //recv_data=atoi(inp_data);
-  }*/
-       //boxsize='1'
-      // boxpoint='100'
-  //while(Serial.available()) {
-   
-   /* buffer[bufferIndex]=Serial.read();
-    bufferIndex++;*/
-    //Serial.println(buffer);
-    //recv_data = Serial.readBytes(recv_data,5);
-    //Serial.flush();
-    //Serial.println(recv_data);
-       /*delay(100);
-     for(int a=0; a<21;a++){
-    buffer[a]=NULL;*/
-    //}    
-  //}
-    /*Serial.println("buffer clear");
-     bufferIndex=0;*/   
-   // recv_data =atoi(buffer);
-   
-//    while(Serial.available())
-  //  {
-    //    buff=Serial.read();
+  recv_data = Serial.parseInt();
 
-//        Serial.println(buffer[bufferIndex]);
-      while(Serial.available())
-      {
-         buffer[bufferIndex++]=Serial.read();
-        
-                  
-         if(bufferIndex==5)
-         {
-           recv_data = atoi(buffer);
-           bufferIndex=0;
-         }
-      }
+  ctrl = recv_data/10000;
+  boxSize = recv_data%10000 / 1000;
+  pos = (boxSize%1000)-500;
 
-
- //       if(bufferIndex==maxBufRead)
-     //   {
-   //       bufferIndex=0;
-//          recv_data=atoi(buffer[0]);
-         // Serial.println(atoi(buffer[0]));
-          //Serial.println(atoi(buffer[1]));
-          //Serial.println(atoi(&buffer[2][1]));          
-       // }
- //   }
-    //recv_data = Serial.read();
-//    Serial.println(recv_data);
- 
-   ctrl = recv_data/10000;
-   boxSize = (recv_data%10000) / 1000;
-   pos = (recv_data%1000)%1000;
-   Serial.print(ctrl);
-   Serial.write(9);
-   Serial.print(boxSize);
-   Serial.write(9);
-   Serial.print(pos);
-   Serial.println();
-
+  Serial.println(ctrl,boxSize);
   turn_dir = rotation_dir(pos);
-  if(abs(pos) <= value) {
-    //Advoid_Obstacles();
-    //Serial.println("moving");
-    setMotor(turn_dir, 0, 0);
+  if(abs(pos) < value) {
+    Advoid_Obstacles();
   }
   else {
-    setMotor(turn_dir, 100, 0);
+    setMotor(turn_dir, fast, 0);
   }
-}  
- 
+}
 void setSpeed(int spd) {
   analogWrite(RIGHT_PWM, spd);
   analogWrite(LEFT_PWM, spd);
