@@ -62,7 +62,7 @@ def obj_dtct():
     net.setInput(blob)
     detections = net.forward()
     
-    (startX, startY, endX, endY) = (-100,-100,-10,-10)
+    (startX, startY, endX, endY) = (0,0,0,0)
 
     # loop over the detections
     for i in np.arange(0, detections.shape[2]):

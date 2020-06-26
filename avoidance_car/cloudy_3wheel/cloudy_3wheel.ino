@@ -97,6 +97,7 @@ void cloudy_bot() {
   boxSize = recv_data%10000 / 1000;
   pos = (boxSize%1000)-500;
 
+  Serial.println(ctrl,boxSize);
   turn_dir = rotation_dir(pos);
   if(abs(pos) < value) {
     Advoid_Obstacles();
