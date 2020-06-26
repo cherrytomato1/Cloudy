@@ -4,7 +4,7 @@ import serial           #시리얼 통신
 import os
 import socket               # sockect 모듈 import
 import obj_detection as dtct
-#import RPi.GPIO as GPIO     # GPIO 모듈 import
+
 from time import sleep      # time 모듈의 sleep() 함수 사용
 
 #GPIO.setmode(GPIO.BCM)      # 라즈베리파이의 핀모드를 BCM 모드로 설정
@@ -16,8 +16,10 @@ PORT = 8080                 # 소켓 통신 PORT 지정
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)       # 소켓 객체 생성
 
 
+
 ser = serial.Serial('/dev/ttyUSB0')
 print("START!! ")
+
 
 print ('Socket created')                                    # 소켓 생성 시 출력문
 s.bind((HOST, PORT))                                        # 소켓 주소 정보 할당

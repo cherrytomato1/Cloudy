@@ -193,7 +193,7 @@ void loop(){
    
   int pos=atoi(buffer);
   if(pos>=0){
-    if(pos<7)
+    if(pos<5)
     Serial.println(pos);
     else{
     int state= pos/10000;
