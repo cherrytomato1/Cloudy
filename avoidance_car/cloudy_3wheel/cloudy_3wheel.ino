@@ -358,7 +358,7 @@ void Advoid_Check() {
   }
   else {
     setMotor(FORWARD, fast, 0);
-    //Serial.println("FORWARD");
+    Serial.println("FORWARD");
   }
 } 
 
@@ -417,9 +417,10 @@ void loop() {
   cur_time = millis();
   if(cur_time - pre_time >= mtime) { // 50ms 마다 초음파 측정
     Read_distance();
-    cloudy_bot();
+    //cloudy_bot();
+    Advoid_Obstacles();
     pre_time = cur_time;
-    //ShowDistance();   
+    ShowDistance();   
   }
   
   /*setMotor(FORWARD, fast, 0);
