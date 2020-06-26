@@ -3,7 +3,7 @@
 import serial           #시리얼 통신
 import os
 import socket               # sockect 모듈 import
-#import RPi.GPIO as GPIO     # GPIO 모듈 import
+import RPi.GPIO as GPIO     # GPIO 모듈 import
 from time import sleep      # time 모듈의 sleep() 함수 사용
 
 GPIO.setmode(GPIO.BCM)      # 라즈베리파이의 핀모드를 BCM 모드로 설정
@@ -14,7 +14,7 @@ number = 10                            # 소켓 통신 IP 지정(wlan0 자동으
 PORT = 8080                 # 소켓 통신 PORT 지정
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)       # 소켓 객체 생성
 
-ser = serial.Serial('/dev/ttyACM1')
+ser = serial.Serial('/dev/ttyUSB0')
 print("START!!")
 
 print ('Socket created')                                    # 소켓 생성 시 출력문
@@ -27,13 +27,13 @@ while True:                                                 # 무한 루프
     conn, addr = s.accept()                                 # Client에서 연결 요청이 들어올 경우 연결 수락
     print("Connected by ", addr)                            # 연결된 Client의 addr 출력         
     while True:                                             # 무한 루프
+       state='1'
        boxsize='1'
        boxpoint='100'
        data = conn.recv(1024)                              # Client에서 받은 데이터를 data변수에 저장
        data = data.decode("utf8").strip()
        
        if data == '5':
-        state='1'
         data = state+boxsize+boxpoint
            
        if not data: break                                  # 데이터 수신이 안되는 경우 무한 루프를 벗어남
