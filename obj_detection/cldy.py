@@ -10,17 +10,14 @@ from time import sleep      # time 모듈의 sleep() 함수 사용
 
 state = "1"
 pos = size = 10
+data = "test"
 
-def recvDctc() :
+def serWrite() :
     while True :
-        print("getting test")
-        pos, size = dtct.obj_dtct()
-        
-        pos= int(pos) + 500
-        if(size>100) :
-            size = '9'
-        else :
-            size = str(size/10)
+        ser.write(data.encode('utf-8'))
+        #print(3)
+        print("Send: " + data)                          # 받은 데이터 출력
+
 
 def recvSock() :
     while True :
@@ -34,11 +31,11 @@ PORT = 8080                 # 소켓 통신 PORT 지정
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)       # 소켓 객체 생성
 
 
-rd = threading.Thread(target=recvDctc)
+sw = threading.Thread(target=serWrite)
 rs = threading.Thread(target=recvSock)
 
-rd.daemon =True
 rs.daemon =True
+sw.daemon =True
 
 
 
@@ -55,8 +52,8 @@ print("START!! ")
 while True:                                                 # 무한 루프
     #conn, addr = s.accept()                                 # Client에서 연결 요청이 들어올 경우 연결 수락
     #print("Connected by ", addr)                            # 연결된 Client의 addr 출력         
-    rd.start()
     #rs.start()
+    #sw.start()
 
     while True:
                                                             # 무한 루프
@@ -68,14 +65,18 @@ while True:                                                 # 무한 루프
         #state = state[len(state) - 1]
         
         state = 1
+        pos, size = dtct.obj_dtct()
+        
+        pos= int(pos) + 500
+        if(size>200) :
+            size = '9'
+        else :
+            size = str(size/20)
         
         print(str(state) + ', ' + str(size) +', '+str(pos))
 
         data = str(state)+str(size)+str(pos)
         
-        #ser.write(data.encode('utf-8'))
-        #print(3)
-        print("Send: " + data)                          # 받은 데이터 출력
         
     conn.close()                                            # 연결 끊기
     dtct.stop_dtct()
