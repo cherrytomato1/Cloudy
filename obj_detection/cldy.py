@@ -8,7 +8,7 @@ import threading
 from time import sleep      # time 모듈의 sleep() 함수 사용
 
 
-str state = '0'
+str state = "0" 
 int pos = size = 0
 
 def recvDctc() :
@@ -55,9 +55,12 @@ while True:                                                 # 무한 루프
         #state = state.decode("utf8").strip()
         #if not state: break                                  # 데이터 수신이 안되는 경우 무한 루프를 벗어남
 
-        state = '1'
-        state = state[len(state) - 1]
+        #state = '1'
+        #state = state[len(state) - 1]
         
+        state = 1
+
+
         pos= int(pos) + 500
         if(size>100) :
             size = '9'
