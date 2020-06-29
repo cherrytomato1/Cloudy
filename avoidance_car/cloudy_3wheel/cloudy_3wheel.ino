@@ -61,6 +61,8 @@ const float beta = (1 - alpha);
 int slow = 100;
 int fast = 200;
 int normal = 75;
+int rot_spd = 45;
+
 int i;
 // 시리얼 통신 변수 선언
 char data;
@@ -198,10 +200,15 @@ void cloudy_bot() {
         Serial.print("POS:");
         Serial.println(pos);
         turn_dir = rotation_dir(pos);
+        if(abs(pos) >= 50) 
+          rot_spd = 55;
+        else
+          rot_spd = 45;
+        
         if(turn_dir == LEFT_TURN) 
-          trun_left(50);
+          trun_left(rot_spd);
         else if(turn_dir == RIGHT_TURN) 
-          trun_right(50);
+          trun_right(rot_spd);
       }  
     }
     else if(abs(pos) <= value) 
