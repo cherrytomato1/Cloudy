@@ -60,6 +60,7 @@ const float beta = (1 - alpha);
 
 int slow = 100;
 int fast = 200;
+int normal = 75;
 int i;
 // 시리얼 통신 변수 선언
 char data;
@@ -140,6 +141,14 @@ int rotation_dir(int data) {
   }
   return dir;
 }
+void move_left_forward(int angle) {
+  ctrlMotor(0, (normal-angle));
+  ctrlMotor(1, -(normal+angle));
+}
+void move_right_forward(int angle) {
+  ctrlMotor(0, normal-angle);
+  ctrlMotor(1, -(normal+angle));
+}
 void cloudy_bot() {
   Serial.println("START");
   value = abs(10);
@@ -175,11 +184,30 @@ void cloudy_bot() {
     if(boxSize == 0)
       move_stop();
       //patrol_mode();
-    
+    else if(boxSize >= 7) {
+      if(abs(pos) <= value) 
+      {
+        //Advoid_Obstacles();
+        move_stop();
+        Serial.print("POS:");
+        Serial.println(pos);
+      }
+      
+      else 
+      {
+        Serial.print("POS:");
+        Serial.println(pos);
+        turn_dir = rotation_dir(pos);
+        if(turn_dir == LEFT_TURN) 
+          trun_left(50);
+        else if(turn_dir == RIGHT_TURN) 
+          trun_right(50);
+      }  
+    }
     else if(abs(pos) <= value) 
     {
       //Advoid_Obstacles();
-      move_stop();
+      move_up(normal);
       Serial.print("POS:");
       Serial.println(pos);
     }
@@ -190,9 +218,9 @@ void cloudy_bot() {
       Serial.println(pos);
       turn_dir = rotation_dir(pos);
       if(turn_dir == LEFT_TURN) 
-        trun_left(fast/3);
+        move_left_forward(pos/10);
       else if(turn_dir == RIGHT_TURN) 
-        trun_right(fast/3);
+        move_right_forward(pos/10);
     }    
   }
 }  
