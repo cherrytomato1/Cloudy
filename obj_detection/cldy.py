@@ -9,7 +9,7 @@ from time import sleep      # time 모듈의 sleep() 함수 사용
 
 
 state = "1"
-pos = size = 0
+pos = size = 10
 
 def recvDctc() :
     while True :
@@ -62,7 +62,7 @@ while True:                                                 # 무한 루프
 
 
         pos= int(pos) + 500
-        if(size>100) :
+        if(intsize>100) :
             size = '9'
         else :
             size = str(int(size/10))
