@@ -37,17 +37,17 @@ rs.daemon =True
 print("START!! ")
 
 
-print ('Socket created')                                    # 소켓 생성 시 출력문
-s.bind((HOST, PORT))                                        # 소켓 주소 정보 할당
-print ('Socket bind complete')                              # 소켓 바인드 성공 시 출력문
-s.listen(1)                                                 # 소켓 연결 수신 대기 상태
-print ('Socket now listening')                              # 소켓 리스닝 시 출력문
-print ('IP address:' + HOST)    
+#print ('Socket created')                                    # 소켓 생성 시 출력문
+#s.bind((HOST, PORT))                                        # 소켓 주소 정보 할당
+#print ('Socket bind complete')                              # 소켓 바인드 성공 시 출력문
+#s.listen(1)                                                 # 소켓 연결 수신 대기 상태
+#print ('Socket now listening')                              # 소켓 리스닝 시 출력문
+#print ('IP address:' + HOST)    
 while True:                                                 # 무한 루프
-    conn, addr = s.accept()                                 # Client에서 연결 요청이 들어올 경우 연결 수락
-    print("Connected by ", addr)                            # 연결된 Client의 addr 출력         
+    #conn, addr = s.accept()                                 # Client에서 연결 요청이 들어올 경우 연결 수락
+    #print("Connected by ", addr)                            # 연결된 Client의 addr 출력         
     rd.start()
-    rs.start()
+    #rs.start()
 
     while True:
                                                             # 무한 루프
