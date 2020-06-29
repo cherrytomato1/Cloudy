@@ -10,11 +10,11 @@ from time import sleep      # time 모듈의 sleep() 함수 사용
 
 state, pos, size = 0
 
-def recvDctc :
+def recvDctc() :
     while True :
         pos, size = dtct.obj_dtct()    
 
-def recvSock :
+def recvSock() :
     while True :
         state = conn.recv(1024)                              # Client에서 받은 데이터를 data변수에 저장
         state = state.decode("utf8").strip()
@@ -66,7 +66,7 @@ while True:                                                 # 무한 루프
 
         data = str(state)+str(size)+str(pos)
         
-        ser.write(data.encode('utf-8'))
+        #ser.write(data.encode('utf-8'))
         #print(3)
         print("Send: " + data)                          # 받은 데이터 출력
         
