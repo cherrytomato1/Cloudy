@@ -285,6 +285,7 @@ void ctrlMotor(int wheel, int speed) {  //wheel 바퀴 번호 (0=right, 1=left, 
   analogWrite(motorPwm[wheel], abs(speed));
 }
 
+
 void trun_left(int spd) {
   ctrlMotor(R_WHEEL, spd);
   ctrlMotor(L_WHEEL, spd);
@@ -320,7 +321,6 @@ void move_stop() {
   ctrlMotor(L_WHEEL, 0);
   ctrlMotor(B_WHEEL, 0);
 }
-
 
 void setMotor(int dir, int spd, int dur) {  // 모터 제어
    if(dir == 0) { // dir에 따라 방향 제어
