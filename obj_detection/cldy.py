@@ -15,19 +15,19 @@ data = "test"
 def serWrite() :
     while True :
         global data
-        sleep(0.01)
+        sleep(0.1)
         ser.write(data.encode('utf-8'))
-        #print(3)
+        print(data)
         
 
 
 def recvSock() :
     while True :
-        global state
+        global state,conn
         state = conn.recv(1024)                              # Client에서 받은 데이터를 data변수에 저장
         state = state.decode("utf8").strip()
         state = state[len(state) - 1]
-        print(state)
+        print("recv"+state)
 
 
 HOST = os.popen('ip addr show wlan0 | grep "\<inet\>" | awk \'{ print $2 }\' | awk -F "/" \'{ print $1 }\'').read().strip()
@@ -67,8 +67,11 @@ while True:                                                 # 무한 루프
         #if not state: break                                  # 데이터 수신이 안되는 경우 무한 루프를 벗어남
 
         
-        
+        sleep(0.01)
         pos, size = dtct.obj_dtct();
+
+        pos = int(pos)
+        size= int(size)
         
         pos= int(pos) + 500
         if(size>200) :
@@ -77,12 +80,12 @@ while True:                                                 # 무한 루프
             size = str(size/20)
             size = size[0]
         
-        print(str(state) + ', ' + str(size) +', '+str(pos))
+        #print(str(state) + ', ' + str(size) +', '+str(pos))
 
         if(state == '7') :
             data = '1'+str(size)+str(pos)
         else :
-            data = str(state)
+            data = '0000'+str(state)
         
         
     conn.close()                                            # 연결 끊기
