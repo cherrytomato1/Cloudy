@@ -26,8 +26,14 @@
 
 #define maxBufRead 5
 
+#define SIDE_DETECTION_DISTANCE 17
+#define DETECTION_DISTANCE 15
+#define FRONT_STAY_TIME 1
+
 int trig[3] = {34, 36, 42}; // 좌측, 정면, 우측
 int echo[3] = {32, 38, 40};
+int motorDir[3][2] ={RIGHT_A, RIGHT_B, LEFT_A, LEFT_B, BACK_A, BACK_B};
+int morotPwm[3] = {RIGHT_PWM, LEFT_PWM, BACK_PWM};
 
 unsigned long cur_time ;
 unsigned long pre_time ;
@@ -99,67 +105,17 @@ int rotation_dir(int data) {
 }
 void cloudy_bot() {
   value = abs(10);
-  //Serial.println("hyo");
-  //Serial.print("available:");
-  //Serial.println(Serial.available());
-  /*if(Serial.available() == 5) {
-    char inp_data[5];
-    for(i=0;i<5;i++){
-      inp_data[i] = Serial.read();
-    }    
-   
-    Serial.println(inp_data);
-    //recv_data=atoi(inp_data);
-  }*/
-       //boxsize='1'
-      // boxpoint='100'
-  //while(Serial.available()) {
-   
-   /* buffer[bufferIndex]=Serial.read();
-    bufferIndex++;*/
-    //Serial.println(buffer);
-    //recv_data = Serial.readBytes(recv_data,5);
-    //Serial.flush();
-    //Serial.println(recv_data);
-       /*delay(100);
-     for(int a=0; a<21;a++){
-    buffer[a]=NULL;*/
-    //}    
-  //}
-    /*Serial.println("buffer clear");
-     bufferIndex=0;*/   
-   // recv_data =atoi(buffer);
-   
-//    while(Serial.available())
-  //  {
-    //    buff=Serial.read();
-
-//        Serial.println(buffer[bufferIndex]);
-      while(Serial.available())
-      {
-         buffer[bufferIndex++]=Serial.read();
-        
-                  
-         if(bufferIndex==5)
-         {
-           recv_data = atoi(buffer);
-           bufferIndex=0;
-         }
-      }
-
-
- //       if(bufferIndex==maxBufRead)
-     //   {
-   //       bufferIndex=0;
-//          recv_data=atoi(buffer[0]);
-         // Serial.println(atoi(buffer[0]));
-          //Serial.println(atoi(buffer[1]));
-          //Serial.println(atoi(&buffer[2][1]));          
-       // }
- //   }
-    //recv_data = Serial.read();
-//    Serial.println(recv_data);
- 
+  while(Serial.available())
+  {
+     buffer[bufferIndex++]=Serial.read();
+    
+              
+     if(bufferIndex==5)
+     {
+       recv_data = atoi(buffer);
+       bufferIndex=0;
+     }
+  }
    ctrl = recv_data/10000;
    boxSize = (recv_data%10000) / 1000;
    pos = (recv_data%1000)%1000;
@@ -172,19 +128,17 @@ void cloudy_bot() {
 
   turn_dir = rotation_dir(pos);
   if(abs(pos) <= value) {
-    //Advoid_Obstacles();
-    //Serial.println("moving");
-    setMotor(turn_dir, 0, 0);
+    Advoid_Obstacles();
   }
   else {
-    setMotor(turn_dir, 100, 0);
+    setMotor(turn_dir, fast, 0);
   }
 }  
  
-void setSpeed(int spd) {
-  analogWrite(RIGHT_PWM, spd);
-  analogWrite(LEFT_PWM, spd);
-  analogWrite(BACK_PWM, spd);
+void setSpeed(int right_spd, int left_spd, int back_spd) {  // pwm제어를 통한 속도 조절
+  analogWrite(RIGHT_PWM, right_spd);
+  analogWrite(LEFT_PWM, left_spd);
+  analogWrite(BACK_PWM, back_spd);
 }
 
 void duration(int dur) {
@@ -225,11 +179,6 @@ void forward() {
   digitalWrite(BACK_A, LOW);
   digitalWrite(BACK_B, LOW);
 }
-void dir_speed() {
-  analogWrite(LEFT_PWM, slow);
-  analogWrite(RIGHT_PWM, slow);
-  analogWrite(BACK_PWM, fast);
-}
 void right() {
   digitalWrite(BACK_A, LOW);
   digitalWrite(BACK_B, HIGH);
@@ -257,39 +206,107 @@ void back() {
   digitalWrite(BACK_B, LOW);
 }
 
-void setMotor(int dir, int spd, int dur) {
-   if(dir == 0) {
-    setSpeed(spd);
+void setRightMotorDir(int speed) {
+  int dir;
+  
+  if(speed<0)
+    dir=1;
+  else
+    dir=0;
+  if(dir == 0) {
+    digitalWrite(RIGHT_A, HIGH);
+    digitalWrite(RIGHT_B, LOW);
+  }
+  else {
+    digitalWrite(RIGHT_A, LOW);
+    digitalWrite(RIGHT_B, HIGH); 
+  }
+  analogWrite(RIGHT_PWM, speed);
+}
+void setLeftMotorDir(int speed) {
+  int dir;
+  
+  if(speed<0)
+    dir=1;
+  else
+    dir=0;
+  if(dir == 0) {
+    digitalWrite(LEFT_A, HIGH);
+    digitalWrite(LEFT_B, LOW);
+  }
+  else {
+    digitalWrite(LEFT_A, LOW);
+    digitalWrite(LEFT_B, HIGH); 
+  }
+  analogWrite(LEFT_PWM, speed);
+}
+void setBackMotorDir(int speed) {
+  int dir;
+  
+  if(speed<0)
+    dir=1;
+  else
+    dir=0;
+    
+  if(dir == 0) {
+    digitalWrite(BACK_A, HIGH);
+    digitalWrite(BACK_B, LOW);
+  }
+  else {
+    digitalWrite(BACK_A, LOW);
+    digitalWrite(BACK_B, HIGH); 
+  }
+  
+  analogWrite(BACK_PWM, speed);
+}
+
+void ctrlMotor(int wheel, int speed) {
+  int dir;
+  
+  if(speed<0)
+    dir=0;
+  else
+    dir=1;
+    
+  digitalWrite(motorDir[wheel][0], dir);
+  digitalWrite(motorDir[wheel][1], !dir);
+  
+  analogWrite(motorPwm[wheel], abs(speed));
+}
+
+void setMotor(int dir, int spd, int dur) {  // 모터 제어
+   if(dir == 0) { // dir에 따라 방향 제어
+    setSpeed(spd, spd, spd);  // 속도 조절
     stop();
-    duration(dur);
+    duration(dur);  // delay()
   }
    else if(dir == 1) {
-    setSpeed(spd);
+    setSpeed(spd, spd, spd);
     forward();
     duration(dur);
   }
    else if(dir == 2) {
-    dir_speed();
+    setSpeed(spd, spd, spd*2);  //
     right();
     duration(dur);
   }
    else if(dir == 3) {
-    dir_speed();
+    setSpeed(spd, spd, spd*2);
     left();
     duration(dur);
   }
   else if(dir == 4) {
-    setSpeed(spd);
+    setSpeed(spd, spd, spd);
     back();
     duration(dur);
   }
   else if(dir == 5) {
-    setSpeed(spd);
+    setSpeed(spd, spd, spd);
     left_turn();
     duration(dur);
   }
   else if(dir == 6) {
-    setSpeed(spd);
+    setSpeed(spd, spd, spd);
     right_turn();
     duration(dur);
   }
@@ -312,7 +329,7 @@ unsigned long UltraSonic(int TRIG, int ECHO) {
   return distance;
 }
 
-void Read_distance() {
+void Read_distance() {  // 초음파 측정 함수
   // 이전 측정 값에 비중을 두고, 현재 측정된 값엔 비중을 낮춤.
   distance_F = UltraSonic(trig[1], echo[1]);
   distance_F = round((alpha * distance_F) + ( beta * pre_distance_F));
@@ -330,7 +347,7 @@ void Read_distance() {
   pre_distance_R = distance_R;
 }
 
-void ShowDistance() {
+void ShowDistance() { // 초음파 값 출력
   Serial.print(distance_L);
   Serial.print("cm");
   Serial.write(9); //tab
@@ -342,16 +359,16 @@ void ShowDistance() {
   Serial.println();
 }
 
-void Advoid_Check() {
-  if(distance_L <= side_detection_distance && distance_R <= side_detection_distance && distance_F <= detection_distance) {
+void Advoid_Check() { // 정면에 장애물 없이 왼쪽 오른쪽에 장애물 있을때
+  /*if(distance_L <= side_detection_distance && distance_R <= side_detection_distance && distance_F <= detection_distance) {
     Serial.println("U-turn");
-  }
-  else if(distance_L <= side_detection_distance) {
+  }*/
+  else if(distance_L <= SIDE_DETECTION_DISTANCE) {
     setMotor(RIGHT, 0, turn_delay);
     front_check = 0;
     Serial.println("RIGHT");
   }
-  else if(distance_R <= side_detection_distance) {
+  else if(distance_R <= SIDE_DETECTION_DISTANCE) {
     setMotor(LEFT, 0, turn_delay);
     front_check = 0;
     Serial.println("LEFT");
@@ -362,28 +379,28 @@ void Advoid_Check() {
   }
 } 
 
-void Advoid_Obstacles() {
-  if(distance_F <= detection_distance) {
+void Advoid_Obstacles() { // 장애물 회피
+  if(distance_F <= DETECTION_DISTANCE) {  // 정면 장애물 감지
     setMotor(STOP, 0, 0);
     Serial.println("STOP");
     front_check += 1;
     //Serial.println(front_check);
-    if(front_check >= front_stay_time) {
-      if(distance_L <= side_detection_distance2 && distance_R <= side_detection_distance2) {
+    if(front_check >= FRONT_STAY_TIME) {  
+      if(distance_L <= SIDE_DETECTION_DISTANCE && distance_R <= SIDE_DETECTION_DISTANCE) { // 정면에 장애물이 있고 양쪽에도 장애물이 있을때
         Serial.println("U-TURN2");
         setMotor(RIGHT_TURN, fast, uturn_delay);
       }
-      else if(distance_R <= detection_distance) {
+      else if(distance_R <= DETECTION_DISTANCE) {   // 정면에 장애물 있고 오른쪽에도 장애물이 있을때
         Serial.println("LEFT2");
         setMotor(LEFT, 0, turn_delay);
         front_check = 0;
       }
-      else if(distance_L <= detection_distance) {
+      else if(distance_L <= DETECTION_DISTANCE) {   // 정면에 장애물 있고 왼쪽에도 장애물이 있을때
         Serial.println("RIGHT2");
         setMotor(RIGHT, 0, turn_delay);
         front_check = 0;
       }
-      else {
+      else {                                        // 정면에만 장애물 있으면 왼쪽으로
         Serial.println("LEFT3");
         setMotor(LEFT, 0, turn_delay);
         front_check = 0;
