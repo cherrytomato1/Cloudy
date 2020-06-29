@@ -87,16 +87,35 @@ int uturn_delay = 1500;
 int turn_delay = 175; // 65
 int delayy = 1500;
 
-int serial_data() {
+char serial_data() {
   if(Serial.available()) {
     data = Serial.read();
     input_data = data - 48;
   }
   return input_data;
 }
-
-void control_bot() {
-  setMotor(serial_data(), 0, 0);
+void control_bot(int ctrl_data) {
+  if(ctrl_data == 0) {
+    move_stop()
+  }
+  else if(ctrl_data == 1) {
+    move_up(fast);
+  }
+  else if(ctrl_data == 2) {
+    move_down(fast);
+  }
+  else if(ctrl_data == 3) {
+    move_right(fast);
+  }
+  else if(ctrl_data == 4) {
+    move_left(fast);
+  }
+  else if(ctrl_data == 5) {
+    turn_right(fast);
+  }
+  else if(ctrl_data == 6) {
+    trun_left(fast);
+  }
 }
 int rotation_dir(int data) {
   int dir;
@@ -112,37 +131,41 @@ void cloudy_bot() {
   value = abs(10);
   while(Serial.available())
   {
-     buffer[bufferIndex++]=Serial.read();
-    
-              
+     buffer[bufferIndex++]=Serial.read();  
      if(bufferIndex==5)
      {
        recv_data = atoi(buffer);
        bufferIndex=0;
      }
   }
-   ctrl = recv_data/10000;
+   ctrl = recv_data/10000;    //1이면 객체인식, 0 수동조작
    boxSize = (recv_data%10000) / 1000;
    pos = (recv_data%1000)%1000;
+   /*
    Serial.print(ctrl);
    Serial.write(9);
    Serial.print(boxSize);
    Serial.write(9);
    Serial.print(pos);
-   Serial.println();
-
-  turn_dir = rotation_dir(pos);
-  if(abs(pos) <= value) {
-    Advoid_Obstacles();
+   Serial.println(); 
+  */
+  if(ctrl == 0){
+    control_bot(pos);
   }
-  else {
-    if(turn_dir == LEFT_TURN) {
-      trun_left(fast);
+  else if(ctrl == 1) {
+    turn_dir = rotation_dir(pos);
+    if(abs(pos) <= value) {
+      Advoid_Obstacles();
     }
-    else if(turn_dir == RIGHT_TURN) {
-      turn_right(fast);
-    }
-    //setMotor(turn_dir, fast, 0);
+    else {
+      if(turn_dir == LEFT_TURN) {
+        trun_left(fast);
+      }
+      else if(turn_dir == RIGHT_TURN) {
+        turn_right(fast);
+      }
+      //setMotor(turn_dir, fast, 0);
+    }    
   }
 }  
  
