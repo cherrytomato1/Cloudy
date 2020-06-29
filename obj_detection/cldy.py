@@ -8,7 +8,7 @@ import threading
 from time import sleep      # time 모듈의 sleep() 함수 사용
 
 
-state = "1"
+state = '1'
 pos = size = 10
 data = "test"
 
@@ -21,8 +21,11 @@ def serWrite() :
 
 def recvSock() :
     while True :
+        global state
         state = conn.recv(1024)                              # Client에서 받은 데이터를 data변수에 저장
         state = state.decode("utf8").strip()
+        state = state[len(state) - 1]
+        print(state)
 
 
 HOST = os.popen('ip addr show wlan0 | grep "\<inet\>" | awk \'{ print $2 }\' | awk -F "/" \'{ print $1 }\'').read().strip()
@@ -62,7 +65,6 @@ while True:                                                 # 무한 루프
         #if not state: break                                  # 데이터 수신이 안되는 경우 무한 루프를 벗어남
 
         
-        state = state[len(state) - 1]
         
         pos, size = dtct.obj_dtct();
         
