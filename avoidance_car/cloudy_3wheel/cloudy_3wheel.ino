@@ -94,7 +94,7 @@ char serial_data() {
   }
   return input_data;
 }
-void control_bot(int ctrl_data) {
+void control_mode(int ctrl_data) {
   if(ctrl_data == 0) {
     move_stop();
   }
@@ -117,6 +117,19 @@ void control_bot(int ctrl_data) {
     trun_left(fast);
   }
 }
+void patrol_mode() {
+  int pat = random(1);
+  move_up(fast);
+  delay(5000);
+  if(pat==0) {
+    trun_right(fast);
+  }
+  else {
+    trun_left(fast);
+  }
+  delay(random(500,1001));
+  Advoid_Obstacles();
+}
 int rotation_dir(int data) {
   int dir;
   if(data < 0) {
@@ -128,10 +141,12 @@ int rotation_dir(int data) {
   return dir;
 }
 void cloudy_bot() {
+  Serial.println("START");
   value = abs(10);
   bufferIndex=0;
   while(Serial.available())
   {
+     //Serial.println("GOOOD");
      buffer[bufferIndex++]=Serial.read();  
      if(bufferIndex==5)
      {
@@ -143,7 +158,7 @@ void cloudy_bot() {
   }
    ctrl = recv_data/10000;    //1이면 객체인식, 0 수동조작
    boxSize = (recv_data%10000) / 1000;
-   pos = recv_data%1000;
+   pos = (recv_data%1000) - 500;
    
    Serial.print(ctrl);
    Serial.write(9);
@@ -152,22 +167,32 @@ void cloudy_bot() {
    Serial.print(pos);
    Serial.println(); 
   
-  if(ctrl == 0){
-    control_bot(pos);
-  }
-  else if(ctrl == 1) {
-    turn_dir = rotation_dir(pos);
-    if(abs(pos) <= value) {
-      Advoid_Obstacles();
+  if(ctrl == 0)
+    control_mode(pos);
+  
+  else if(ctrl == 1) 
+  {
+    if(boxSize == 0)
+      move_stop();
+      //patrol_mode();
+    
+    else if(abs(pos) <= value) 
+    {
+      //Advoid_Obstacles();
+      move_stop();
+      Serial.print("POS:");
+      Serial.println(pos);
     }
-    else {
-      if(turn_dir == LEFT_TURN) {
-        trun_left(fast);
-      }
-      else if(turn_dir == RIGHT_TURN) {
-        trun_right(fast);
-      }
-      //setMotor(turn_dir, fast, 0);
+    
+    else 
+    {
+      Serial.print("POS:");
+      Serial.println(pos);
+      turn_dir = rotation_dir(pos);
+      if(turn_dir == LEFT_TURN) 
+        trun_left(fast/3);
+      else if(turn_dir == RIGHT_TURN) 
+        trun_right(fast/3);
     }    
   }
 }  
@@ -514,8 +539,10 @@ void setup() {
 void loop() {
   cur_time = millis();
   if(cur_time - pre_time >= mtime) { // 50ms 마다 초음파 측정
+    //Serial.println(2);
     Read_distance();
     cloudy_bot();
+    //Serial.println(1);
     //Advoid_Obstacles();
     //test();
     pre_time = cur_time;
