@@ -15,9 +15,10 @@ data = "test"
 def serWrite() :
     while True :
         global data
+        sleep(0.01)
         ser.write(data.encode('utf-8'))
         #print(3)
-        print("Send: " + data)                          # 받은 데이터 출력
+        
 
 
 def recvSock() :
@@ -43,7 +44,7 @@ sw.daemon =True
 
 
 
-#ser = serial.Serial('/dev/ttyUSB0')
+ser = serial.Serial('/dev/ttyUSB0')
 print("START!! ")
 
 
@@ -57,7 +58,7 @@ while True:                                                 # 무한 루프
     conn, addr = s.accept()                                 # Client에서 연결 요청이 들어올 경우 연결 수락
     print("Connected by ", addr)                            # 연결된 Client의 addr 출력         
     rs.start()
-    #sw.start()
+    sw.start()
 
     while True:
                                                             # 무한 루프
