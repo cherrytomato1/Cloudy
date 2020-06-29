@@ -11,6 +11,11 @@
 #define BACK_B 26
 #define BACK_PWM 9
 
+// 바퀴 정의
+#define R_WHEEL 0
+#define L_WHEEL 1
+#define B_WHEEL 2
+
 #define STOP 0
 #define FORWARD 1
 #define RIGHT 2
@@ -33,7 +38,7 @@
 int trig[3] = {34, 36, 42}; // 좌측, 정면, 우측
 int echo[3] = {32, 38, 40};
 int motorDir[3][2] ={RIGHT_A, RIGHT_B, LEFT_A, LEFT_B, BACK_A, BACK_B};
-int morotPwm[3] = {RIGHT_PWM, LEFT_PWM, BACK_PWM};
+int motorPwm[3] = {RIGHT_PWM, LEFT_PWM, BACK_PWM};
 
 unsigned long cur_time ;
 unsigned long pre_time ;
@@ -131,7 +136,13 @@ void cloudy_bot() {
     Advoid_Obstacles();
   }
   else {
-    setMotor(turn_dir, fast, 0);
+    if(turn_dir == LEFT_TURN) {
+      trun_left(fast);
+    }
+    else if(turn_dir == RIGHT_TURN) {
+      turn_right(fast);
+    }
+    //setMotor(turn_dir, fast, 0);
   }
 }  
  
@@ -227,14 +238,14 @@ void setLeftMotorDir(int speed) {
   int dir;
   
   if(speed<0)
-    dir=1;
+    dir=1;a
   else
     dir=0;
   if(dir == 0) {
     digitalWrite(LEFT_A, HIGH);
     digitalWrite(LEFT_B, LOW);
   }
-  else {
+  else 
     digitalWrite(LEFT_A, LOW);
     digitalWrite(LEFT_B, HIGH); 
   }
@@ -274,12 +285,47 @@ void ctrlMotor(int wheel, int speed) {  //wheel 바퀴 번호 (0=right, 1=left, 
   analogWrite(motorPwm[wheel], abs(speed));
 }
 
-void turn_left()
+
+void trun_left(int spd) {
+  ctrlMotor(R_WHEEL, spd);
+  ctrlMotor(L_WHEEL, spd);
+  ctrlMotor(B_WHEEL, -spd);
+}
+void trun_right(int spd) {
+  ctrlMotor(R_WHEEL, -spd);
+  ctrlMotor(L_WHEEL, -spd);
+  ctrlMotor(B_WHEEL, spd);
+}
+void move_up(int spd) {
+  ctrlMotor(R_WHEEL, spd);
+  ctrlMotor(L_WHEEL, -spd);, 
+  ctrlMotor(B_WHEEL, 0);
+}
+void move_down(int spd) {
+  ctrlMotor(R_WHEEL, -spd);
+  ctrlMotor(L_WHEEL, spd);
+  ctrlMotor(B_WHEEL, 0);
+}
+void move_right(int spd, int num) {
+  ctrlMotor(R_WHEEL, -spd);
+  ctrlMotor(L_WHEEL, -spd+num);
+  ctrlMotor(B_WHEEL, -spd*2);
+}
+void move_left(int spd, int num) {
+  ctrlMotor(R_WHEEL, spd+num);
+  ctrlMotor(L_WHEEL, spd);
+  ctrlMotor(B_WHEEL, spd*2);
+}
+void move_stop() {
+  ctrlMotor(R_WHEEL, 0);
+  ctrlMotor(L_WHEEL, 0);
+  ctrlMotor(B_WHEEL, 0);
+}
 
 void setMotor(int dir, int spd, int dur) {  // 모터 제어
    if(dir == 0) { // dir에 따라 방향 제어
     setSpeed(spd, spd, spd);  // 속도 조절
-    stop();
+    move_stop();
     duration(dur);  // delay()
   }
    else if(dir == 1) {
@@ -362,49 +408,56 @@ void ShowDistance() { // 초음파 값 출력
 }
 
 void Advoid_Check() { // 정면에 장애물 없이 왼쪽 오른쪽에 장애물 있을때
-  /*if(distance_L <= side_detection_distance && distance_R <= side_detection_distance && distance_F <= detection_distance) {
+  if(distance_L <= SIDE_DETECTION_DISTANCE && distance_R <= SIDE_DETECTION_DISTANCE && distance_F <= DETECTION_DISTANCE) {
     Serial.println("U-turn");
-  }*/
+  }
   else if(distance_L <= SIDE_DETECTION_DISTANCE) {
-    setMotor(RIGHT, 0, turn_delay);
+    move_right(fast);
+    delay(1500);
     front_check = 0;
     Serial.println("RIGHT");
   }
   else if(distance_R <= SIDE_DETECTION_DISTANCE) {
-    setMotor(LEFT, 0, turn_delay);
+    move_left(fast);
+    delay(1500);
     front_check = 0;
     Serial.println("LEFT");
   }
   else {
-    setMotor(FORWARD, fast, 0);
+    move_up(fast);
+    delay(1500);
     Serial.println("FORWARD");
   }
 } 
 
 void Advoid_Obstacles() { // 장애물 회피
   if(distance_F <= DETECTION_DISTANCE) {  // 정면 장애물 감지
-    setMotor(STOP, 0, 0);
+    stop();
     Serial.println("STOP");
     front_check += 1;
     //Serial.println(front_check);
     if(front_check >= FRONT_STAY_TIME) {  
       if(distance_L <= SIDE_DETECTION_DISTANCE && distance_R <= SIDE_DETECTION_DISTANCE) { // 정면에 장애물이 있고 양쪽에도 장애물이 있을때
         Serial.println("U-TURN2");
-        setMotor(RIGHT_TURN, fast, uturn_delay);
+        trun_right(fast);
+        delay(1500);
       }
       else if(distance_R <= DETECTION_DISTANCE) {   // 정면에 장애물 있고 오른쪽에도 장애물이 있을때
         Serial.println("LEFT2");
-        setMotor(LEFT, 0, turn_delay);
+        move_left(fast);
+        delay(1500);
         front_check = 0;
       }
       else if(distance_L <= DETECTION_DISTANCE) {   // 정면에 장애물 있고 왼쪽에도 장애물이 있을때
         Serial.println("RIGHT2");
-        setMotor(RIGHT, 0, turn_delay);
+        move_right(fast);
+        delay(1500);
         front_check = 0;
       }
       else {                                        // 정면에만 장애물 있으면 왼쪽으로
         Serial.println("LEFT3");
-        setMotor(LEFT, 0, turn_delay);
+        move_left(fast);
+        delay(1500);
         front_check = 0;
       }
     }
@@ -431,16 +484,28 @@ void setup() {
   }
   delay(1000);
 }
-
+void test() {
+    /*up(100);
+    delay(3000);
+    down(100);
+    delay(3000);*/
+    rig(100);
+    delay(3000);
+    lef(100);
+    delay(3000);
+    stop();
+}
 void loop() {
   cur_time = millis();
   if(cur_time - pre_time >= mtime) { // 50ms 마다 초음파 측정
     Read_distance();
     //cloudy_bot();
     Advoid_Obstacles();
+    //test();
     pre_time = cur_time;
     ShowDistance();   
   }
+}
   
   /*setMotor(FORWARD, fast, 0);
   delay(delayy);
@@ -451,4 +516,3 @@ void loop() {
   setMotor(LEFT, 0, 0);
   delay(delayy);*/
   
-}
