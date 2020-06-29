@@ -13,7 +13,14 @@ pos = size = 10
 
 def recvDctc() :
     while True :
-        pos, size = dtct.obj_dtct()    
+        print("getting test")
+        pos, size = dtct.obj_dtct()
+        
+        pos= int(pos) + 500
+        if(size>100) :
+            size = '9'
+        else :
+            size = str(size/10)
 
 def recvSock() :
     while True :
@@ -32,6 +39,8 @@ rs = threading.Thread(target=recvSock)
 
 rd.daemon =True
 rs.daemon =True
+
+
 
 #ser = serial.Serial('/dev/ttyUSB0')
 print("START!! ")
@@ -59,13 +68,6 @@ while True:                                                 # 무한 루프
         #state = state[len(state) - 1]
         
         state = 1
-
-
-        pos= int(pos) + 500
-        if((int(size)>100)) :
-            size = '9'
-        else :
-            size = str(int(size/10))
         
         print(str(state) + ', ' + str(size) +', '+str(pos))
 
