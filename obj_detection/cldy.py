@@ -32,7 +32,7 @@ rs = threading.Thread(target=recvSock)
 rd.daemon =True
 rs.daemon =True
 
-ser = serial.Serial('/dev/ttyUSB0')
+#ser = serial.Serial('/dev/ttyUSB0')
 print("START!! ")
 
 
@@ -54,6 +54,7 @@ while True:                                                 # 무한 루프
         #state = state.decode("utf8").strip()
         #if not state: break                                  # 데이터 수신이 안되는 경우 무한 루프를 벗어남
 
+        state = '1'
         state = state[len(state) - 1]
         
         pos= int(pos) + 500
