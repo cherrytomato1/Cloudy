@@ -96,7 +96,7 @@ char serial_data() {
 }
 void control_bot(int ctrl_data) {
   if(ctrl_data == 0) {
-    move_stop()
+    move_stop();
   }
   else if(ctrl_data == 1) {
     move_up(fast);
@@ -105,13 +105,13 @@ void control_bot(int ctrl_data) {
     move_down(fast);
   }
   else if(ctrl_data == 3) {
-    move_right(fast);
+    move_right(fast, 0);
   }
   else if(ctrl_data == 4) {
-    move_left(fast);
+    move_left(fast, 0);
   }
   else if(ctrl_data == 5) {
-    turn_right(fast);
+    trun_right(fast);
   }
   else if(ctrl_data == 6) {
     trun_left(fast);
@@ -129,26 +129,29 @@ int rotation_dir(int data) {
 }
 void cloudy_bot() {
   value = abs(10);
+  bufferIndex=0;
   while(Serial.available())
   {
      buffer[bufferIndex++]=Serial.read();  
      if(bufferIndex==5)
      {
+       Serial.print("BUFFER: ");
+       Serial.println(buffer);
        recv_data = atoi(buffer);
        bufferIndex=0;
      }
   }
    ctrl = recv_data/10000;    //1이면 객체인식, 0 수동조작
    boxSize = (recv_data%10000) / 1000;
-   pos = (recv_data%1000)%1000;
-   /*
+   pos = recv_data%1000;
+   
    Serial.print(ctrl);
    Serial.write(9);
    Serial.print(boxSize);
    Serial.write(9);
    Serial.print(pos);
    Serial.println(); 
-  */
+  
   if(ctrl == 0){
     control_bot(pos);
   }
@@ -162,7 +165,7 @@ void cloudy_bot() {
         trun_left(fast);
       }
       else if(turn_dir == RIGHT_TURN) {
-        turn_right(fast);
+        trun_right(fast);
       }
       //setMotor(turn_dir, fast, 0);
     }    
@@ -261,14 +264,14 @@ void setLeftMotorDir(int speed) {
   int dir;
   
   if(speed<0)
-    dir=1;a
+    dir=1;
   else
     dir=0;
   if(dir == 0) {
     digitalWrite(LEFT_A, HIGH);
     digitalWrite(LEFT_B, LOW);
   }
-  else 
+  else {
     digitalWrite(LEFT_A, LOW);
     digitalWrite(LEFT_B, HIGH); 
   }
@@ -321,7 +324,7 @@ void trun_right(int spd) {
 }
 void move_up(int spd) {
   ctrlMotor(R_WHEEL, spd);
-  ctrlMotor(L_WHEEL, -spd);, 
+  ctrlMotor(L_WHEEL, -spd);
   ctrlMotor(B_WHEEL, 0);
 }
 void move_down(int spd) {
@@ -435,13 +438,13 @@ void Advoid_Check() { // 정면에 장애물 없이 왼쪽 오른쪽에 장애�
     Serial.println("U-turn");
   }
   else if(distance_L <= SIDE_DETECTION_DISTANCE) {
-    move_right(fast);
+    move_right(fast, 0);
     delay(1500);
     front_check = 0;
     Serial.println("RIGHT");
   }
   else if(distance_R <= SIDE_DETECTION_DISTANCE) {
-    move_left(fast);
+    move_left(fast, 0);
     delay(1500);
     front_check = 0;
     Serial.println("LEFT");
@@ -467,19 +470,19 @@ void Advoid_Obstacles() { // 장애물 회피
       }
       else if(distance_R <= DETECTION_DISTANCE) {   // 정면에 장애물 있고 오른쪽에도 장애물이 있을때
         Serial.println("LEFT2");
-        move_left(fast);
+        move_left(fast, 0);
         delay(1500);
         front_check = 0;
       }
       else if(distance_L <= DETECTION_DISTANCE) {   // 정면에 장애물 있고 왼쪽에도 장애물이 있을때
         Serial.println("RIGHT2");
-        move_right(fast);
+        move_right(fast, 0);
         delay(1500);
         front_check = 0;
       }
       else {                                        // 정면에만 장애물 있으면 왼쪽으로
         Serial.println("LEFT3");
-        move_left(fast);
+        move_left(fast, 0);
         delay(1500);
         front_check = 0;
       }
@@ -507,35 +510,16 @@ void setup() {
   }
   delay(1000);
 }
-void test() {
-    /*up(100);
-    delay(3000);
-    down(100);
-    delay(3000);*/
-    rig(100);
-    delay(3000);
-    lef(100);
-    delay(3000);
-    stop();
-}
+
 void loop() {
   cur_time = millis();
   if(cur_time - pre_time >= mtime) { // 50ms 마다 초음파 측정
     Read_distance();
-    //cloudy_bot();
-    Advoid_Obstacles();
+    cloudy_bot();
+    //Advoid_Obstacles();
     //test();
     pre_time = cur_time;
-    ShowDistance();   
+    //ShowDistance();   
   }
 }
-  
-  /*setMotor(FORWARD, fast, 0);
-  delay(delayy);
-  setMotor(BACK, fast, 0);
-  delay(delayy);
-  setMotor(RIGHT, 0, 0);
-  delay(delayy);
-  setMotor(LEFT, 0, 0);
-  delay(delayy);*/
   
