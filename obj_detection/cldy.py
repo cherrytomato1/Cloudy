@@ -62,7 +62,7 @@ while True:                                                 # 무한 루프
 
 
         pos= int(pos) + 500
-        if(size>100) :
+        if((int(size)>100) :
             size = '9'
         else :
             size = str(int(size/10))
