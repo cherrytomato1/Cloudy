@@ -8,7 +8,7 @@ import threading
 from time import sleep      # time 모듈의 sleep() 함수 사용
 
 
-state, pos, size = 0
+state = pos = size = 0
 
 def recvDctc() :
     while True :
