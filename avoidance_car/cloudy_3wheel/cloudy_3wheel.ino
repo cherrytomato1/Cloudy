@@ -260,8 +260,8 @@ void setBackMotorDir(int speed) {
   analogWrite(BACK_PWM, speed);
 }
 
-void ctrlMotor(int wheel, int speed) {
-  int dir;
+void ctrlMotor(int wheel, int speed) {  //wheel 바퀴 번호 (0=right, 1=left, 2=back, speed -255~255)
+  int dir;                              //회전방향
   
   if(speed<0)
     dir=0;
