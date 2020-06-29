@@ -14,6 +14,7 @@ data = "test"
 
 def serWrite() :
     while True :
+        global data
         ser.write(data.encode('utf-8'))
         #print(3)
         print("Send: " + data)                          # 받은 데이터 출력
@@ -73,6 +74,7 @@ while True:                                                 # 무한 루프
             size = '9'
         else :
             size = str(size/20)
+            size = size[0]
         
         print(str(state) + ', ' + str(size) +', '+str(pos))
 
