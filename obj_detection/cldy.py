@@ -64,6 +64,8 @@ while True:                                                 # 무한 루프
         
         state = state[len(state) - 1]
         
+        pos, size = dtct.obj_dtct();
+        
         pos= int(pos) + 500
         if(size>200) :
             size = '9'
@@ -72,9 +74,9 @@ while True:                                                 # 무한 루프
         
         print(str(state) + ', ' + str(size) +', '+str(pos))
 
-        if(state = '7') :
+        if(state == '7') :
             data = '1'+str(size)+str(pos)
-        else
+        else :
             data = str(state)
         
         
