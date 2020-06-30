@@ -108,16 +108,16 @@ void control_mode(int ctrl_data) {
     move_down(fast);
   }
   else if(ctrl_data == 3) {
-    move_right(fast, 0);
+    move_left(normal,0);
   }
   else if(ctrl_data == 4) {
-    move_left(fast, 0);
+    move_right(normal,0);
   }
   else if(ctrl_data == 5) {
-    trun_right(fast);
+    trun_left(normal);
   }
   else if(ctrl_data == 6) {
-    trun_left(fast);
+    trun_right(normal);
   }
 }
 void patrol_mode() {
@@ -144,8 +144,8 @@ int rotation_dir(int data) {
   return dir;
 }
 void move_left_forward(int angle) {
-  ctrlMotor(0, (normal-angle));
-  ctrlMotor(1, -(normal+angle));
+  ctrlMotor(0, (fast-angle));
+  ctrlMotor(1, -(fast+angle));
 }
 void move_right_forward(int angle) {
   ctrlMotor(0, normal-angle);
@@ -169,7 +169,7 @@ void cloudy_bot() {
   }
    ctrl = recv_data/10000;    //1이면 객체인식, 0 수동조작
    boxSize = (recv_data%10000) / 1000;
-   pos = (recv_data%1000) - 500;
+   pos = (recv_data%1000);
    
    Serial.print(ctrl);
    Serial.write(9);
@@ -183,6 +183,7 @@ void cloudy_bot() {
   
   else if(ctrl == 1) 
   {
+    pos = pos - 500;
     if(boxSize == 0)
       move_stop();
       //patrol_mode();
@@ -203,7 +204,7 @@ void cloudy_bot() {
         if(abs(pos) >= 50) 
           rot_spd = 55;
         else
-          rot_spd = 45;
+          rot_spd = 50;
         
         if(turn_dir == LEFT_TURN) 
           trun_left(rot_spd);
@@ -223,6 +224,8 @@ void cloudy_bot() {
     {
       Serial.print("POS:");
       Serial.println(pos);
+      //Advoid_Obstacles();
+      //Advoid_Check2(pos);
       turn_dir = rotation_dir(pos);
       if(turn_dir == LEFT_TURN) 
         move_left_forward(pos/10);
@@ -392,15 +395,15 @@ void move_down(int spd) {
   ctrlMotor(L_WHEEL, spd);
   ctrlMotor(B_WHEEL, 0);
 }
-void move_right(int spd, int num) {
+void move_right(int spd, int angle) {
   ctrlMotor(R_WHEEL, -spd);
-  ctrlMotor(L_WHEEL, -spd+num);
-  ctrlMotor(B_WHEEL, -spd*2);
+  ctrlMotor(L_WHEEL, -spd);
+  ctrlMotor(B_WHEEL, (-spd)*2-angle);
 }
-void move_left(int spd, int num) {
-  ctrlMotor(R_WHEEL, spd+num);
+void move_left(int spd, int angle) {
+  ctrlMotor(R_WHEEL, spd);
   ctrlMotor(L_WHEEL, spd);
-  ctrlMotor(B_WHEEL, spd*2);
+  ctrlMotor(B_WHEEL, (spd)*2+angle);
 }
 void move_stop() {
   ctrlMotor(R_WHEEL, 0);
@@ -492,33 +495,59 @@ void ShowDistance() { // 초음파 값 출력
   Serial.print("cm");
   Serial.println();
 }
-
+void Advoid_Check2(int pos) {
+  if(distance_F <= DETECTION_DISTANCE) {
+    if(distance_L <= SIDE_DETECTION_DISTANCE && distance_R <= SIDE_DETECTION_DISTANCE) {
+      trun_right(normal);
+      
+    }
+    else if(distance_L <= DETECTION_DISTANCE) {
+      move_right(normal,pos/10);
+      
+    }
+    else if(distance_R <= DETECTION_DISTANCE) {
+      move_left(normal,pos/10);
+      
+    }
+    else {
+      move_right(1000,pos/10);
+      
+    }
+  }
+  else {  // 전진
+      Serial.println("FORWARD");
+      if(pos < 0) 
+        move_left_forward(pos/10);
+      else if(pos > 0) 
+        move_right_forward(pos/10);
+  }
+}
 void Advoid_Check() { // 정면에 장애물 없이 왼쪽 오른쪽에 장애물 있을때
   if(distance_L <= SIDE_DETECTION_DISTANCE && distance_R <= SIDE_DETECTION_DISTANCE && distance_F <= DETECTION_DISTANCE) {
     Serial.println("U-turn");
   }
   else if(distance_L <= SIDE_DETECTION_DISTANCE) {
-    move_right(fast, 0);
+    move_right(fast,0);
     delay(1500);
     front_check = 0;
     Serial.println("RIGHT");
   }
   else if(distance_R <= SIDE_DETECTION_DISTANCE) {
-    move_left(fast, 0);
+    move_left(fast,0);
     delay(1500);
     front_check = 0;
     Serial.println("LEFT");
   }
   else {
-    move_up(fast);
+    /*move_up(fast);
     delay(1500);
-    Serial.println("FORWARD");
+    Serial.println("FORWARD");*/
   }
 } 
 
 void Advoid_Obstacles() { // 장애물 회피
   if(distance_F <= DETECTION_DISTANCE) {  // 정면 장애물 감지
-    stop();
+    move_stop();
     Serial.println("STOP");
     front_check += 1;
     //Serial.println(front_check);
@@ -530,19 +559,19 @@ void Advoid_Obstacles() { // 장애물 회피
       }
       else if(distance_R <= DETECTION_DISTANCE) {   // 정면에 장애물 있고 오른쪽에도 장애물이 있을때
         Serial.println("LEFT2");
-        move_left(fast, 0);
+        move_left(fast,0);
         delay(1500);
         front_check = 0;
       }
       else if(distance_L <= DETECTION_DISTANCE) {   // 정면에 장애물 있고 왼쪽에도 장애물이 있을때
         Serial.println("RIGHT2");
-        move_right(fast, 0);
+        move_right(fast,0);
         delay(1500);
         front_check = 0;
       }
       else {                                        // 정면에만 장애물 있으면 왼쪽으로
         Serial.println("LEFT3");
-        move_left(fast, 0);
+        move_left(fast,0);
         delay(1500);
         front_check = 0;
       }
