@@ -97,7 +97,7 @@ def obj_dtct():
 
     # show the output frame"
     cv2.imshow("Frame", frame)
-    key = cv2.waitKey(1) & 0xFF
+    cv2.waitKey(1)
 
     # if the `q` key was pressed, break from the loop
     #if key == ord("q"):
