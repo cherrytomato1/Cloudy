@@ -72,7 +72,7 @@ long recv_data;
 int turn_dir;
 String strr;
 
-int ctrl;     //controll, ㅈㅔ어정보
+int ctrl;     //control, ㅈㅔ어정보
 int pos;      //position, 좌표정보
 int boxSize;  //boxSize 
 
@@ -97,6 +97,7 @@ char serial_data() {
   }
   return input_data;
 }
+
 void control_mode(int ctrl_data) {
   if(ctrl_data == 0) {
     move_stop();
@@ -120,6 +121,7 @@ void control_mode(int ctrl_data) {
     trun_right(normal);
   }
 }
+
 void patrol_mode() {
   int pat = random(1);
   move_up(fast);
@@ -133,6 +135,7 @@ void patrol_mode() {
   delay(random(500,1001));
   Advoid_Obstacles();
 }
+
 int rotation_dir(int data) {
   int dir;
   if(data < 0) {
@@ -143,14 +146,17 @@ int rotation_dir(int data) {
   }
   return dir;
 }
+
 void move_left_forward(int angle) {
   ctrlMotor(0, (fast-angle));
   ctrlMotor(1, -(fast+angle));
 }
+
 void move_right_forward(int angle) {
   ctrlMotor(0, normal-angle);
   ctrlMotor(1, -(normal+angle));
 }
+
 void cloudy_bot() {
   Serial.println("START");
   value = abs(10);
@@ -167,9 +173,9 @@ void cloudy_bot() {
        bufferIndex=0;
      }
   }
-   ctrl = recv_data/10000;    //1이면 객체인식, 0 수동조작
-   boxSize = (recv_data%10000) / 1000;
-   pos = (recv_data%1000);
+   ctrl = recv_data/10000;              // 1이면 객체인식, 0 수동조작 앞에 한자리
+   boxSize = (recv_data%10000) / 1000;  // 앞에서 두 번째 자리, 크면 클 수록 박스가 크다
+   pos = (recv_data%1000);              // 나머지 세 자리
    
    Serial.print(ctrl);
    Serial.write(9);
@@ -178,17 +184,18 @@ void cloudy_bot() {
    Serial.print(pos);
    Serial.println(); 
   
-  if(ctrl == 0)
+  if(ctrl == 0) // 수동 조작 모드
     control_mode(pos);
   
-  else if(ctrl == 1) 
+  else if(ctrl == 1) // 자율 주행(객체인식) 모드
   {
     pos = pos - 500;
-    if(boxSize == 0)
+    Advoid_Check2(pos);
+    if(boxSize == 0)  // 0 -> 박스사이즈가 없음, 인식 X -> 패트롤 모드
       move_stop();
       //patrol_mode();
-    else if(boxSize >= 7) {
-      if(abs(pos) <= value) 
+    else if(boxSize >= 7) { // 박스사이즈가 7 이상 -> 객체 인식함
+      if(abs(pos) <= value) // pos가 10보다 작을때 -> 기계앞에 개가 있을때  
       {
         //Advoid_Obstacles();
         move_stop();
@@ -196,8 +203,9 @@ void cloudy_bot() {
         Serial.println(pos);
       }
       
-      else 
+      else  // 기계 앞에 개가 없을때
       {
+        // 기계를 개 앞으로 움직이는 작업
         Serial.print("POS:");
         Serial.println(pos);
         turn_dir = rotation_dir(pos);
@@ -207,12 +215,15 @@ void cloudy_bot() {
           rot_spd = 50;
         
         if(turn_dir == LEFT_TURN) 
-          trun_left(rot_spd);
+          //trun_left(rot_spd);
+          move_left_forward(pos/10);
+
         else if(turn_dir == RIGHT_TURN) 
-          trun_right(rot_spd);
+          //trun_right(rot_spd);
+          move_left_forward(pos/10);
       }  
     }
-    else if(abs(pos) <= value) 
+    /*else if(abs(pos) <= value) 
     {
       //Advoid_Obstacles();
       move_up(normal);
@@ -231,133 +242,15 @@ void cloudy_bot() {
         move_left_forward(pos/10);
       else if(turn_dir == RIGHT_TURN) 
         move_right_forward(pos/10);
-    }    
+    }  */  
   }
 }  
  
-void setSpeed(int right_spd, int left_spd, int back_spd) {  // pwm제어를 통한 속도 조절
-  analogWrite(RIGHT_PWM, right_spd);
-  analogWrite(LEFT_PWM, left_spd);
-  analogWrite(BACK_PWM, back_spd);
-}
 
 void duration(int dur) {
   if(duration > 0) {
     delay(dur);
   }
-}
-
-void stop() {
-  digitalWrite(RIGHT_A, LOW);
-  digitalWrite(RIGHT_B, LOW);
-  digitalWrite(LEFT_A, LOW);
-  digitalWrite(LEFT_B, LOW);
-  digitalWrite(BACK_A, LOW);
-  digitalWrite(BACK_B, LOW);
-}
-void left_turn() {
-  digitalWrite(RIGHT_A, HIGH);
-  digitalWrite(RIGHT_B, LOW);
-  digitalWrite(LEFT_A, HIGH);
-  digitalWrite(LEFT_B, LOW);
-  digitalWrite(BACK_A, LOW);
-  digitalWrite(BACK_B, HIGH);
-}
-void right_turn() {
-  digitalWrite(RIGHT_A, LOW);
-  digitalWrite(RIGHT_B, HIGH);
-  digitalWrite(LEFT_A, LOW);
-  digitalWrite(LEFT_B, HIGH);
-  digitalWrite(BACK_A, HIGH);
-  digitalWrite(BACK_B, LOW);
-}
-void forward() {
-  digitalWrite(RIGHT_A, HIGH);
-  digitalWrite(RIGHT_B, LOW);
-  digitalWrite(LEFT_A, LOW);
-  digitalWrite(LEFT_B, HIGH);
-  digitalWrite(BACK_A, LOW);
-  digitalWrite(BACK_B, LOW);
-}
-void right() {
-  digitalWrite(BACK_A, LOW);
-  digitalWrite(BACK_B, HIGH);
-  digitalWrite(RIGHT_A, LOW);
-  digitalWrite(RIGHT_B, HIGH);
-  digitalWrite(LEFT_A, LOW);
-  digitalWrite(LEFT_B, HIGH);
-}
-
-void left() {
-  digitalWrite(BACK_A, HIGH);
-  digitalWrite(BACK_B, LOW);
-  digitalWrite(RIGHT_A, HIGH);
-  digitalWrite(RIGHT_B, LOW);
-  digitalWrite(LEFT_A, HIGH);
-  digitalWrite(LEFT_B, LOW);
-}
-
-void back() {
-  digitalWrite(RIGHT_A, LOW);
-  digitalWrite(RIGHT_B, HIGH);
-  digitalWrite(LEFT_A, HIGH);
-  digitalWrite(LEFT_B, LOW);
-  digitalWrite(BACK_A, LOW);
-  digitalWrite(BACK_B, LOW);
-}
-
-void setRightMotorDir(int speed) {
-  int dir;
-  
-  if(speed<0)
-    dir=1;
-  else
-    dir=0;
-  if(dir == 0) {
-    digitalWrite(RIGHT_A, HIGH);
-    digitalWrite(RIGHT_B, LOW);
-  }
-  else {
-    digitalWrite(RIGHT_A, LOW);
-    digitalWrite(RIGHT_B, HIGH); 
-  }
-  analogWrite(RIGHT_PWM, speed);
-}
-void setLeftMotorDir(int speed) {
-  int dir;
-  
-  if(speed<0)
-    dir=1;
-  else
-    dir=0;
-  if(dir == 0) {
-    digitalWrite(LEFT_A, HIGH);
-    digitalWrite(LEFT_B, LOW);
-  }
-  else {
-    digitalWrite(LEFT_A, LOW);
-    digitalWrite(LEFT_B, HIGH); 
-  }
-  analogWrite(LEFT_PWM, speed);
-}
-void setBackMotorDir(int speed) {
-  int dir;
-  
-  if(speed<0)
-    dir=1;
-  else
-    dir=0;
-    
-  if(dir == 0) {
-    digitalWrite(BACK_A, HIGH);
-    digitalWrite(BACK_B, LOW);
-  }
-  else {
-    digitalWrite(BACK_A, LOW);
-    digitalWrite(BACK_B, HIGH); 
-  }
-  
-  analogWrite(BACK_PWM, speed);
 }
 
 void ctrlMotor(int wheel, int speed) {  //wheel 바퀴 번호 (0=right, 1=left, 2=back, speed -255~255)
@@ -411,44 +304,6 @@ void move_stop() {
   ctrlMotor(B_WHEEL, 0);
 }
 
-void setMotor(int dir, int spd, int dur) {  // 모터 제어
-   if(dir == 0) { // dir에 따라 방향 제어
-    setSpeed(spd, spd, spd);  // 속도 조절
-    move_stop();
-    duration(dur);  // delay()
-  }
-   else if(dir == 1) {
-    setSpeed(spd, spd, spd);
-    forward();
-    duration(dur);
-  }
-   else if(dir == 2) {
-    setSpeed(spd, spd, spd*2);  //
-    right();
-    duration(dur);
-  }
-   else if(dir == 3) {
-    setSpeed(spd, spd, spd*2);
-    left();
-    duration(dur);
-  }
-  else if(dir == 4) {
-    setSpeed(spd, spd, spd);
-    back();
-    duration(dur);
-  }
-  else if(dir == 5) {
-    setSpeed(spd, spd, spd);
-    left_turn();
-    duration(dur);
-  }
-  else if(dir == 6) {
-    setSpeed(spd, spd, spd);
-    right_turn();
-    duration(dur);
-  }
-}
-
 unsigned long UltraSonic(int TRIG, int ECHO) {
 
   //trigger 발사
@@ -499,19 +354,19 @@ void Advoid_Check2(int pos) {
   if(distance_F <= DETECTION_DISTANCE) {
     if(distance_L <= SIDE_DETECTION_DISTANCE && distance_R <= SIDE_DETECTION_DISTANCE) {
       trun_right(normal);
-      
+      delay(1800);
     }
     else if(distance_L <= DETECTION_DISTANCE) {
       move_right(normal,pos/10);
-      
+      delay(1000);
     }
     else if(distance_R <= DETECTION_DISTANCE) {
       move_left(normal,pos/10);
-      
+      delay(1000);
     }
     else {
       move_right(1000,pos/10);
-      
+      delay(1000);
     }
   }
   else {  // 전진
@@ -608,9 +463,7 @@ void loop() {
     cloudy_bot();
     //Serial.println(1);
     //Advoid_Obstacles();
-    //test();
     pre_time = cur_time;
     //ShowDistance();   
   }
 }
-  
