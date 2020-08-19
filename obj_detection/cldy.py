@@ -21,7 +21,7 @@ def serWrite() :
             data = '0000'+str(state)
         sleep(0.1)
         ser.write(data.encode('utf-8'))
-        print(data)
+        print("serWrite : "+data)
         
 
 
@@ -31,7 +31,7 @@ def recvSock() :
         state = conn.recv(1024)                              # Client에서 받은 데이터를 data변수에 저장
         state = state.decode("utf8").strip()
         state = state[len(state) - 1]
-        print("recv2"+state)
+        print("recvSock : "+state)
 
 def getDtct() :
     while True :
