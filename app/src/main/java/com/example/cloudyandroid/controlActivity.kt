@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.ColorRes
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.MotionEvent
@@ -278,7 +277,6 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
             }
 
         }
-
 
         //socket = launch(Dispatchers.Default) {
         //새로운 코루틴(쓰레드) 할당 - > socket통신을 위함

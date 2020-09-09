@@ -5,7 +5,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_main">
+android:background="@drawable/background_main">
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -15,17 +15,17 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 />
-    </LinearLayout>
 
+    </LinearLayout>
     <LinearLayout
+            android:layout_weight="0.75"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.75">
+            android:layout_height="match_parent">
         <WebView
                 android:id="@+id/webV"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                >
+        >
         </WebView>
     </LinearLayout>
     <LinearLayout
