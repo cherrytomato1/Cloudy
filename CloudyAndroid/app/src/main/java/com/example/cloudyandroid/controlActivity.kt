@@ -69,6 +69,7 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
 
         //눌린 버튼 확인 변수
         var checkBTN = 0
+        var count = 0
         //소켓 인스턴스 객체생성
         sock = socketClass()
         //각 방향키의 리스너 할당
@@ -160,6 +161,113 @@ class controlActivity : AppCompatActivity(), CoroutineScope {
                 }
                 MotionEvent.ACTION_CANCEL ->{
                     Log.d("디버그","BWD-CANCEL")
+                    checkBTN = 0
+                    true
+                }
+                else -> {
+                    true
+                }
+            }
+
+        }
+        btnLeftTurn.setOnTouchListener { _: View, event ->
+            //버튼에 어떤 행동이 취해졌는지
+            when (event.action) {
+                //눌려있는 상태일 경우
+                MotionEvent.ACTION_DOWN -> {
+                    Log.d("디버그","LEFTTURN-DOWN")
+                    //버튼 고유 값으로 변수값 변경
+                    checkBTN = 5
+                    true
+                }
+                //떼어질 경우
+                MotionEvent.ACTION_UP -> {
+                    Log.d("디버그","LEFTTURN-UP")
+                    checkBTN = 0
+                    true
+                }
+                //벗어날 경우
+                MotionEvent.ACTION_CANCEL ->{
+                    Log.d("디버그","LEFTTURN-CANCEL")
+                    //기본 값으로
+                    checkBTN = 0
+                    true
+                }
+                else -> {
+                    true
+                }
+            }
+
+        }
+        btnRightTurn.setOnTouchListener { _: View, event ->
+            //버튼에 어떤 행동이 취해졌는지
+            when (event.action) {
+                //눌려있는 상태일 경우
+                MotionEvent.ACTION_DOWN -> {
+                    Log.d("디버그","RIGHTTURN-DOWN")
+                    //버튼 고유 값으로 변수값 변경
+                    checkBTN = 6
+
+                    true
+                }
+                //떼어질 경우
+                MotionEvent.ACTION_UP -> {
+                    Log.d("디버그","RIGHTTURN-UP")
+                    checkBTN = 0
+
+                    true
+                }
+                //벗어날 경우
+                MotionEvent.ACTION_CANCEL ->{
+                    Log.d("디버그","RIGHTTURN-CANCEL")
+                    //기본 값으로
+                    checkBTN = 0
+                    true
+                }
+                else -> {
+                    true
+                }
+            }
+
+        }
+        btnAuto.setOnTouchListener { _: View, event ->
+            //버튼에 어떤 행동이 취해졌는지
+            when (event.action) {
+                //눌려있는 상태일 경우
+                MotionEvent.ACTION_DOWN -> {
+                    Log.d("디버그","AUTO-DOWN")
+                    //버튼 고유 값으로 변수값 변경
+                    checkBTN = 7
+                    count++
+
+                    true
+                }
+                //떼어질 경우
+                MotionEvent.ACTION_UP -> {
+                    Log.d("디버그","AUTO-UP")
+                    checkBTN = 7
+                    btnFWD.isEnabled = false
+                    btnBWD.isEnabled = false
+                    btnLEFT.isEnabled = false
+                    btnRGT.isEnabled = false
+                    btnRightTurn.isEnabled = false
+                    btnLeftTurn.isEnabled = false
+                    if(count % 2 == 1) {
+                        Log.d("비활성화","ISENABLED")
+                        btnFWD.isEnabled = true
+                        btnBWD.isEnabled = true
+                        btnLEFT.isEnabled = true
+                        btnRGT.isEnabled = true
+                        btnRightTurn.isEnabled = true
+                        btnLeftTurn.isEnabled = true
+                        checkBTN = 0
+                    }
+                    true
+                }
+                //벗어날 경우
+                MotionEvent.ACTION_CANCEL ->{
+                    Log.d("디버그","AUTO-CANCEL")
+                    //기본 값으로
                     checkBTN = 0
                     true
                 }
