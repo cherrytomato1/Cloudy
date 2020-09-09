@@ -7,32 +7,33 @@ import obj_detection as dtct
 import threading
 from time import sleep      # time 모듈의 sleep() 함수 사용
 
-
+mod= 0
 state = '1'
 pos = size = 10
 data = "test"
 
 def serWrite() :
     while True :
-        global data,state,pos
-        if(state == '7') :
+        global data,state,pos,mod
+        if(mod == 0) :
             data = '1'+str(size)+str(pos)
         else :
             data = '0000'+str(state)
+        sleep(0.1)
         ser.write(data.encode('utf-8'))
         print("serWrite : "+data)
-        sleep(0.1)
         
 
 
 def recvSock() :
     while True :
-        global state,conn
+        global state,conn,mod
         state = conn.recv(1024)                              # Client에서 받은 데이터를 data변수에 저장
         state = state.decode("utf8").strip()
         state = state[len(state) - 1]
+        if (state == '7') :
+            mod = ~mod
         print("recvSock : "+state)
-        sleep(0.1)
 
 def getDtct() :
     while True :
@@ -88,12 +89,8 @@ while True:                                                 # 무한 루프
         #if not state: break                                  # 데이터 수신이 안되는 경우 무한 루프를 벗어남
   
         #print(str(state) + ', ' + str(size) +', '+str(pos))
-                                                    
-    #while True :
-    #    sleep(0.1)
-    #    print("test")
+
     while True :
-        sleep(0.1)
         pos, size = dtct.obj_dtct();
 
         pos = int(pos)
