@@ -19,9 +19,9 @@ def serWrite() :
             data = '1'+str(size)+str(pos)
         else :
             data = '0000'+str(state)
-        sleep(0.1)
         ser.write(data.encode('utf-8'))
         print("serWrite : "+data)
+        sleep(0.1)
         
 
 
@@ -32,6 +32,7 @@ def recvSock() :
         state = state.decode("utf8").strip()
         state = state[len(state) - 1]
         print("recvSock : "+state)
+        sleep(0.1)
 
 def getDtct() :
     while True :
@@ -87,8 +88,12 @@ while True:                                                 # 무한 루프
         #if not state: break                                  # 데이터 수신이 안되는 경우 무한 루프를 벗어남
   
         #print(str(state) + ', ' + str(size) +', '+str(pos))
-
+                                                    
+    #while True :
+    #    sleep(0.1)
+    #    print("test")
     while True :
+        sleep(0.1)
         pos, size = dtct.obj_dtct();
 
         pos = int(pos)
