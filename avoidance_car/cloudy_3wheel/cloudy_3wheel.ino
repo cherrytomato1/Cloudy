@@ -70,7 +70,6 @@ char input_data;
 int value; 
 long recv_data;
 int turn_dir;
-String strr;
 
 int ctrl;     //control, ㅈㅔ어정보
 int pos;      //position, 좌표정보
@@ -115,24 +114,28 @@ void control_mode(int ctrl_data) {
     move_right(normal,0);
   }
   else if(ctrl_data == 5) {
-    trun_left(normal);
+    turn_left(normal);
   }
   else if(ctrl_data == 6) {
-    trun_right(normal);
+    turn_right(normal);
   }
 }
 
-void patrol_mode() {
-  int pat = random(1);
-  move_up(fast);
-  delay(5000);
-  if(pat==0) {
-    trun_right(fast);
+void patrol_mode(int pat) {
+  move_up(normal);
+  delay(3000);
+  switch(pat) {
+    case 0:
+      turn_right(normal);
+      break;
+    case 1:
+      move_down(normal);
+      break;
+    case 2:
+      turn_left(normal);
+      break;
   }
-  else {
-    trun_left(fast);
-  }
-  delay(random(500,1001));
+  delay(random(1000,3000));
   Advoid_Obstacles();
 }
 
@@ -190,14 +193,19 @@ void cloudy_bot() {
   else if(ctrl == 1) // 자율 주행(객체인식) 모드
   {
     pos = pos - 500;
-    Advoid_Check2(pos);
-    if(boxSize == 0)  // 0 -> 박스사이즈가 없음, 인식 X -> 패트롤 모드
-      move_stop();
-      //patrol_mode();
+    
+    if(boxSize == 0){  // 0 -> 박스사이즈가 없음, 인식 X -> 패트롤 모드
+      //move_stop();
+      int pat = 
+      patrol_mode(pat);
+    }
     else if(boxSize >= 7) { // 박스사이즈가 7 이상 -> 객체 인식함
-      if(abs(pos) <= value) // pos가 10보다 작을때 -> 기계앞에 개가 있을때  
+      move_stop();
+      delay(3000);
+      if(abs(pos) <= value) // pos가 10보다 작을때 -> 기계앞에 개가 있을때(기계랑 개랑 일직선상에 있을때)  
       {
         //Advoid_Obstacles();
+        Advoid_Check2(pos);
         move_stop();
         Serial.print("POS:");
         Serial.println(pos);
@@ -205,7 +213,8 @@ void cloudy_bot() {
       
       else  // 기계 앞에 개가 없을때
       {
-        // 기계를 개 앞으로 움직이는 작업
+        // 기계를 개 앞으로 움직이는 작업(고개 돌리기)
+
         Serial.print("POS:");
         Serial.println(pos);
         turn_dir = rotation_dir(pos);
@@ -215,11 +224,11 @@ void cloudy_bot() {
           rot_spd = 50;
         
         if(turn_dir == LEFT_TURN) 
-          //trun_left(rot_spd);
+          //turn_left(rot_spd);
           move_left_forward(pos/10);
 
         else if(turn_dir == RIGHT_TURN) 
-          //trun_right(rot_spd);
+          //turn_right(rot_spd);
           move_left_forward(pos/10);
       }  
     }
@@ -268,12 +277,12 @@ void ctrlMotor(int wheel, int speed) {  //wheel 바퀴 번호 (0=right, 1=left, 
 }
 
 
-void trun_left(int spd) {
+void turn_left(int spd) {
   ctrlMotor(R_WHEEL, spd);
   ctrlMotor(L_WHEEL, spd);
   ctrlMotor(B_WHEEL, -spd);
 }
-void trun_right(int spd) {
+void turn_right(int spd) {
   ctrlMotor(R_WHEEL, -spd);
   ctrlMotor(L_WHEEL, -spd);
   ctrlMotor(B_WHEEL, spd);
@@ -353,7 +362,7 @@ void ShowDistance() { // 초음파 값 출력
 void Advoid_Check2(int pos) {
   if(distance_F <= DETECTION_DISTANCE) {
     if(distance_L <= SIDE_DETECTION_DISTANCE && distance_R <= SIDE_DETECTION_DISTANCE) {
-      trun_right(normal);
+      turn_right(normal);
       delay(1800);
     }
     else if(distance_L <= DETECTION_DISTANCE) {
@@ -367,7 +376,7 @@ void Advoid_Check2(int pos) {
     else {
       move_right(1000,pos/10);
       delay(1000);
-    }
+    } // 발견될떄까지 돌진 개 찾을때까지 돌아다니기 장애물회피하며 
   }
   else {  // 전진
       Serial.println("FORWARD");
@@ -409,7 +418,7 @@ void Advoid_Obstacles() { // 장애물 회피
     if(front_check >= FRONT_STAY_TIME) {  
       if(distance_L <= SIDE_DETECTION_DISTANCE && distance_R <= SIDE_DETECTION_DISTANCE) { // 정면에 장애물이 있고 양쪽에도 장애물이 있을때
         Serial.println("U-TURN2");
-        trun_right(fast);
+        turn_right(fast);
         delay(1500);
       }
       else if(distance_R <= DETECTION_DISTANCE) {   // 정면에 장애물 있고 오른쪽에도 장애물이 있을때
