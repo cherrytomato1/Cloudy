@@ -121,6 +121,7 @@ void control_mode(int ctrl_data) {
   }
 }
 
+<<<<<<< HEAD
 void patrol_mode(int pat) {
   move_up(normal);
   delay(3000);
@@ -134,6 +135,17 @@ void patrol_mode(int pat) {
     case 2:
       turn_left(normal);
       break;
+=======
+void patrol_mode() {
+  int pat = random(1);
+  move_up(fast);
+  delay(5000);
+  if(pat==0) {
+    trun_right(fast);
+  }
+  else {
+    trun_left(fast);
+>>>>>>> 4da98fd69f09c5f17bc22f9c664be2b2b8b067b9
   }
   delay(random(1000,3000));
   Advoid_Obstacles();
@@ -193,6 +205,7 @@ void cloudy_bot() {
   else if(ctrl == 1) // 자율 주행(객체인식) 모드
   {
     pos = pos - 500;
+<<<<<<< HEAD
     
     if(boxSize == 0){  // 0 -> 박스사이즈가 없음, 인식 X -> 패트롤 모드
       //move_stop();
@@ -203,6 +216,14 @@ void cloudy_bot() {
       move_stop();
       delay(3000);
       if(abs(pos) <= value) // pos가 10보다 작을때 -> 기계앞에 개가 있을때(기계랑 개랑 일직선상에 있을때)  
+=======
+    Advoid_Check2(pos);
+    if(boxSize == 0)  // 0 -> 박스사이즈가 없음, 인식 X -> 패트롤 모드
+      move_stop();
+      //patrol_mode();
+    else if(boxSize >= 7) { // 박스사이즈가 7 이상 -> 객체 인식함
+      if(abs(pos) <= value) // pos가 10보다 작을때 -> 기계앞에 개가 있을때  
+>>>>>>> 4da98fd69f09c5f17bc22f9c664be2b2b8b067b9
       {
         //Advoid_Obstacles();
         Advoid_Check2(pos);
@@ -213,8 +234,12 @@ void cloudy_bot() {
       
       else  // 기계 앞에 개가 없을때
       {
+<<<<<<< HEAD
         // 기계를 개 앞으로 움직이는 작업(고개 돌리기)
 
+=======
+        // 기계를 개 앞으로 움직이는 작업
+>>>>>>> 4da98fd69f09c5f17bc22f9c664be2b2b8b067b9
         Serial.print("POS:");
         Serial.println(pos);
         turn_dir = rotation_dir(pos);
@@ -224,11 +249,19 @@ void cloudy_bot() {
           rot_spd = 50;
         
         if(turn_dir == LEFT_TURN) 
+<<<<<<< HEAD
           //turn_left(rot_spd);
           move_left_forward(pos/10);
 
         else if(turn_dir == RIGHT_TURN) 
           //turn_right(rot_spd);
+=======
+          //trun_left(rot_spd);
+          move_left_forward(pos/10);
+
+        else if(turn_dir == RIGHT_TURN) 
+          //trun_right(rot_spd);
+>>>>>>> 4da98fd69f09c5f17bc22f9c664be2b2b8b067b9
           move_left_forward(pos/10);
       }  
     }
@@ -362,7 +395,11 @@ void ShowDistance() { // 초음파 값 출력
 void Advoid_Check2(int pos) {
   if(distance_F <= DETECTION_DISTANCE) {
     if(distance_L <= SIDE_DETECTION_DISTANCE && distance_R <= SIDE_DETECTION_DISTANCE) {
+<<<<<<< HEAD
       turn_right(normal);
+=======
+      trun_right(normal);
+>>>>>>> 4da98fd69f09c5f17bc22f9c664be2b2b8b067b9
       delay(1800);
     }
     else if(distance_L <= DETECTION_DISTANCE) {
@@ -376,7 +413,11 @@ void Advoid_Check2(int pos) {
     else {
       move_right(1000,pos/10);
       delay(1000);
+<<<<<<< HEAD
     } // 발견될떄까지 돌진 개 찾을때까지 돌아다니기 장애물회피하며 
+=======
+    }
+>>>>>>> 4da98fd69f09c5f17bc22f9c664be2b2b8b067b9
   }
   else {  // 전진
       Serial.println("FORWARD");
