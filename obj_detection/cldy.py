@@ -8,7 +8,7 @@ import threading
 from time import sleep      # time 모듈의 sleep() 함수 사용
 
 mod= 0
-state = '1'
+state = 1
 pos = size = 0
 data = "test"
 
@@ -21,25 +21,29 @@ def serWrite() :
             data = '0000'+str(state)
         sleep(0.1)
         ser.write(data.encode('utf-8'))
-        print("serWrite : "+data)
+        print("serWrite : " + data)
         
 
 
 def recvSock() :
     while True :
-        global state,conn,mod
-        state = conn.recv(1024)
+        global state,conn
+        #state = conn.recv(1024)
         #conn.recv(1024)
         #state+=1
         # Client에서 받은 데이터를 data변수에 저장
         #state = state.decode("utf8").strip()
-        state = state[len(state) - 1]-48
-        
-        sleep(0.1)
+        try :
+            state=conn.recv(1024)
+            state = state[len(state) - 1]-48
+            sleep(0.1)
         #if (state == '7') :
             #mod = ~mod
-        print("recvSock : ")
-        print(state)
+            print("recvSock : ")
+            print(state)
+        except socket.timeout :
+            print("timeout")
+        #print(state)
         
 
 def getDtct() :
@@ -89,9 +93,11 @@ print ('Socket now listening')                              # 소켓 리스닝 �
 print ('IP address:' + HOST)    
 while True:                                                 # 무한 루프
     conn, addr = s.accept()                                 # Client에서 연결 요청이 들어올 경우 연결 수락
-    print("Connected by ", addr)                            # 연결된 Client의 addr 출력         
+    print("Connected by ", addr)                            # 연결된 Client의 addr 출력
+    conn.settimeout(1)
     rs.start()
     sw.start()
+    gd.start()
                                                             # 무한 루프
         #state = conn.recv(1024)                              # Client에서 받은 데이터를 data변수에 저장
         #state = state.decode("utf8").strip()
@@ -100,19 +106,26 @@ while True:                                                 # 무한 루프
         #print(str(state) + ', ' + str(size) +', '+str(pos))
 
     while True :
-        pos, size = dtct.obj_dtct()
-
-        pos = int(pos)
-        size= int(size)
-        
-        pos= int(pos) + 500
-        if(size>200) :
-            size = '9'
-        else :
-            size = str(size/20)
-            size = size[0]
+        #state=conn.recv(1024)
+        #if not state :
+        #    print("no data")
             
-        #sleep(0.1)
+        #if (state == '7') :
+            #mod = ~mod
+        #print("recvSock : ")
+        #pos, size = dtct.obj_dtct()
+
+        #pos = int(pos)
+        #size= int(size)
+        
+        #pos= int(pos) + 500
+        #if(size>200) :
+        #    size = '9'
+        #else :
+        #    size = str(size/20)
+        #    size = size[0]
+            
+        sleep(0.1)
         #data = '1'+str(size)+str(pos)
         
     conn.close()                                            # 연결 끊기
