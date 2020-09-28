@@ -42,12 +42,14 @@ net.setPreferableTarget(cv2.dnn.DNN_TARGET_MYRIAD)
 print("[INFO] starting video stream...")
 #vs = VideoStream(usePiCamera=True).start()
 vs = VideoStream(src = 0).start()
+#vs = VideoStream().start()
+    
 time.sleep(2.0)
 fps = FPS().start()
 
 # loop over the frames from the video stream
 def obj_dtct():
-
+    
     # grab the frame from the threaded video stream and resize it
     # to have a maximum width of 400 pixels
     frame = vs.read()
@@ -96,7 +98,7 @@ def obj_dtct():
             
 
     # show the output frame"
-    cv2.imshow("Frame", frame)
+    #cv2.imshow("Frame", frame)
     cv2.waitKey(1)
 
     # if the `q` key was pressed, break from the loop

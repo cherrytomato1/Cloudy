@@ -7,31 +7,46 @@ import obj_detection as dtct
 import threading
 from time import sleep      # time 모듈의 sleep() 함수 사용
 
-
+mod= 0
 state = '1'
-pos = size = 10
+pos = size = 0
 data = "test"
 
 def serWrite() :
     while True :
-        global data
+        global data,pos,mod,state
+        if(state == 7) :
+            data = '1'+str(size)+str(pos)
+        else :
+            data = '0000'+str(state)
         sleep(0.1)
         ser.write(data.encode('utf-8'))
-        print(data)
+        print("serWrite : "+data)
         
 
 
 def recvSock() :
     while True :
-        global state,conn
-        state = conn.recv(1024)                              # Client에서 받은 데이터를 data변수에 저장
-        state = state.decode("utf8").strip()
-        state = state[len(state) - 1]
-        print("recv2"+state)
+        global state,conn,mod
+        state = conn.recv(1024)
+        #conn.recv(1024)
+        #state+=1
+        # Client에서 받은 데이터를 data변수에 저장
+        #state = state.decode("utf8").strip()
+        state = state[len(state) - 1]-48
+        
+        sleep(0.1)
+        #if (state == '7') :
+            #mod = ~mod
+        print("recvSock : ")
+        print(state)
+        
 
 def getDtct() :
     while True :
         global pos, size
+        
+        
         sleep(0.1)
         pos, size = dtct.obj_dtct();
 
@@ -77,28 +92,15 @@ while True:                                                 # 무한 루프
     print("Connected by ", addr)                            # 연결된 Client의 addr 출력         
     rs.start()
     sw.start()
-
-    while True:
                                                             # 무한 루프
         #state = conn.recv(1024)                              # Client에서 받은 데이터를 data변수에 저장
         #state = state.decode("utf8").strip()
         #if not state: break                                  # 데이터 수신이 안되는 경우 무한 루프를 벗어남
-
-        
-        
-        
+  
         #print(str(state) + ', ' + str(size) +', '+str(pos))
-        print(state)
-        if(state == '7') :
-            break;
-            data = '1'+str(size)+str(pos)
-        else :
-            data = '0000'+str(state)
-        
-        
 
     while True :
-        pos, size = dtct.obj_dtct();
+        pos, size = dtct.obj_dtct()
 
         pos = int(pos)
         size= int(size)
@@ -109,7 +111,9 @@ while True:                                                 # 무한 루프
         else :
             size = str(size/20)
             size = size[0]
-        data = '1'+str(size)+str(pos)
+            
+        #sleep(0.1)
+        #data = '1'+str(size)+str(pos)
         
     conn.close()                                            # 연결 끊기
     dtct.stop_dtct()
