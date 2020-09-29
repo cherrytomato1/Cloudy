@@ -41,7 +41,9 @@ net.setPreferableTarget(cv2.dnn.DNN_TARGET_MYRIAD)
 # and initialize the FPS counter
 print("[INFO] starting video stream...")
 #vs = VideoStream(usePiCamera=True).start()
-vs = VideoStream(src = 0).start()
+#vs = VideoStream(src = 0).start()
+#vc = cv2.VideoCapture(0)
+vc = cv2.VideoCapture("http://192.168.137.128:8090/?action=stream")
 #vs = VideoStream().start()
     
 time.sleep(2.0)
@@ -52,7 +54,9 @@ def obj_dtct():
     
     # grab the frame from the threaded video stream and resize it
     # to have a maximum width of 400 pixels
-    frame = vs.read()
+    #frame = vs.read()
+    ret, frame = vc.read()
+    
     frame = imutils.resize(frame, width=400)
 
     # grab the frame dimensions and convert it to a blob
@@ -98,7 +102,8 @@ def obj_dtct():
             
 
     # show the output frame"
-    #cv2.imshow("Frame", frame)
+    cv2.imshow("Cloudy", frame)
+    cv2.imwrite('temp.jpg', frame)
     cv2.waitKey(1)
 
     # if the `q` key was pressed, break from the loop
@@ -118,4 +123,5 @@ def stop_dtct():
 
 # do a bit of cleanup
     cv2.destroyAllWindows()
-    vs.stop()
+    vc.stop()
+
