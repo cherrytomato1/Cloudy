@@ -8,7 +8,7 @@ import threading
 from time import sleep      # time 모듈의 sleep() 함수 사용
 
 mod= 0
-state = 0
+state = 7
 pos = size = 0
 data = "test"
 
@@ -95,7 +95,7 @@ while True:                                                 # 무한 루프
     conn, addr = s.accept()                                 # Client에서 연결 요청이 들어올 경우 연결 수락
     print("Connected by ", addr)                            # 연결된 Client의 addr 출력
     conn.settimeout(1)
-    rs.start()
+    #rs.start()
     sw.start()
     #gd.start()
                                                             # 무한 루프
@@ -112,20 +112,20 @@ while True:                                                 # 무한 루프
             
         #if (state == '7') :
             #mod = ~mod
-        print("recvSock : ")
-        #pos, size = dtct.obj_dtct()
+        #print("recvSock : ")
+        pos, size = dtct.obj_dtct()
 
-        #pos = int(pos)
-        #size= int(size)
+        pos = int(pos)
+        size= int(size)
         
-        #pos= int(pos) + 500
-        #if(size>200) :
-        #    size = '9'
-        #else :
-        #    size = str(size/20)
-        #    size = size[0]
+        pos= int(pos) + 500
+        if(size>200) :
+            size = '9'
+        else :
+            size = str(size/20)
+            size = size[0]
             
-        #data = '1'+str(size)+str(pos)
+        data = '1'+str(size)+str(pos)
         
     conn.close()                                            # 연결 끊기
     dtct.stop_dtct()
