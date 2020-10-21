@@ -58,9 +58,9 @@ unsigned long  distance_R;
 const float alpha = 0.90;
 const float beta = (1 - alpha);
 
-int slow = 100;
+int slow = 60;
 int fast = 200;
-int normal = 75;
+int normal = 150;
 int rot_spd = 45;
 
 int i;
@@ -90,10 +90,13 @@ int turn_delay = 175; // 65
 int delayy = 1500;
 
 // 패트롤모드에 쓰는 변수
-int moveDir = random(0,3);  // 0, 1, 2 (오른쪽, 전진, 왼쪽전)
-int moveTime = random(1111, 5555);
+int moveDir;
+int moveTime;
 unsigned long currentMillis;
 long previousMillis = 0;
+
+// test 변수
+int testarr[5];
 
 void control_mode(int ctrl_data) {
   if(ctrl_data == 0) move_stop();
@@ -107,50 +110,112 @@ void control_mode(int ctrl_data) {
 
 void auto_mode() {
   pos = pos - 500;  
+  move_stop();
   if(boxSize == 0) {  // 0 -> 박스사이즈가 없음, 인식 X -> 패트롤 모드
-    moveDir = random(0,3);  // 0, 1, 2 (오른쪽, 전진, 왼쪽)
-    moveTime = random(1111, 5555);
-    patrol_mode(moveDir, moveTime);     // 이동방향, 이동시간 정하기
-  }
-  
-  else if(boxSize >= 7) { // 박스사이즈가 7 이상 -> 객체 인식함
-    move_stop();
-    if(abs(pos) <= value) // pos가 10보다 작을때 -> 기계앞에 개가 있을때(기계랑 개랑 일직선상에 있을때)  
-    {
-      Advoid_Obstacle(pos);
+//    patrol_mode();     // 이동방향, 이동시간 정하기
       move_stop();
-    }
   }
-  else  // 기계 앞에 개가 없을때
+  //박스사이즈 최소 수정, 속도 조정
+  
+  else if(boxSize >= 8) { // 박스사이즈가 7 이상 -> 객체 인식함
+    
+    if(abs(pos) >= 80) // pos가 10보다 작을때 -> 기계앞에 개가 있을때(기계랑 개랑 일직선상에 있을때)  
+    {
+      turn_dir = rotation_dir(pos);
+      rot_spd = 70;
+      if(turn_dir == LEFT_TURN) 
+        turn_left(rot_spd);
+        //move_left_forward(pos/10);
+  
+      else if(turn_dir == RIGHT_TURN) 
+        turn_right(rot_spd);
+        //move_left_forward(pos/10);    
+      
+      // Advoid_Obstacle(pos);
+    }   
+  }
+  else  // 박스사이즈의 크기가 7이하일때, 거리가 멀때
   {
     // 기계를 개 앞으로 움직이는 작업(고개 돌리기)
     turn_dir = rotation_dir(pos);
-    if(abs(pos) >= 50) 
-      rot_spd = 55;
-    else
-      rot_spd = 50;
-        
-    if(turn_dir == LEFT_TURN) 
-      //turn_left(rot_spd);
-      move_left_forward(pos/10);
-
-    else if(turn_dir == RIGHT_TURN) 
-      //turn_right(rot_spd);
-      move_left_forward(pos/10);
-  } 
+//    if(abs(pos) >= 150){
+//     
+//      rot_spd = 85;
+//          
+//    if(turn_dir == LEFT_TURN) 
+//      turn_left(rot_spd);
+//      //move_left_forward(pos/10);
+//
+//    else if(turn_dir == RIGHT_TURN) 
+//      turn_right(rot_spd);
+//      //move_right_forward(pos/10);    
+//    }
+//    else 
+      turnAndMove(pos/4);
+    
+  }  
 }
 
 // 패트롤 모드(객체 인식 안됐을때)
-void patrol_mode(int moveDir, int moveTime) { // 랜덤 방향, 움직이는 시간
+void patrol_mode() { // 랜덤 방향, 움직이는 시간
+  
   currentMillis = millis();
   if(currentMillis - previousMillis >= moveTime) {
-    if(moveDir == 0) move_up(fast); // 전진
-    else if(moveDir == 1) turn_right(fast); // 오른쪽 회전
-    else if(moveDir == 2) turn_left(fast);  // 왼쪽 회전
+    moveDir = random(0, 6);  // 0, 1, 2, 3, 4, 5 (오른쪽(4), 전진(0~3), 왼쪽(5))
+    moveTime = random(1111, 3333);
+    if(moveDir >= 5) moveTime / 2.5;    // 회전일경우, 회전 시간 줄임
+   
     previousMillis = currentMillis;
+  }
+  if(distance_F <= DETECTION_DISTANCE) {
+      if(moveDir % 2 == 0)
+        turn_right(normal);
+      else
+        turn_left(normal);
+        
+      delay(500);
+      
+  }
+  else {
+      move_up(normal); // 전진
+//     else if(moveDir == 5) turn_right(normal); // 오른쪽 회전
+//     else if(moveDir == 6) turn_left(normal);  // 왼쪽 회전
   }
 }
 
+void patrol_mode_test() { // 랜덤 방향, 움직이는 시간
+  for(i=1; i<5; i++) testarr[i] = random(0, 6);
+  moveTime = random(1111, 5555);
+  currentMillis = millis();
+    for(i=0; i<5; i++) {
+      if(currentMillis - previousMillis >= moveTime) {
+        if(distance_F <= DETECTION_DISTANCE) {
+          Serial.print(i);
+          Serial.print("장애물");
+          Serial.println(testarr[i]);
+          if(i != 4) testarr[i+1] = 0;
+        }
+        else {
+          if(testarr[i] <= 3) {
+            Serial.print(i);
+            Serial.print("전진");
+            Serial.println(testarr[i]);
+          }
+          else if(testarr[i] == 4) {
+            Serial.print(i);
+            Serial.print("오른회전");
+            Serial.println(testarr[i]);
+          }
+          else if(testarr[i] == 5) {
+            Serial.print(i);
+            Serial.print("왼회전");
+            Serial.println(testarr[i]);
+          }
+        }
+        previousMillis = currentMillis;
+      }
+  }
+}
 int rotation_dir(int data) {
   int dir;
   if(data < 0) {
@@ -168,6 +233,10 @@ void move_left_forward(int angle) {
 }
 
 void move_right_forward(int angle) {
+  ctrlMotor(0, normal-angle);
+  ctrlMotor(1, -(normal+angle));
+}
+void turnAndMove(int angle) {
   ctrlMotor(0, normal-angle);
   ctrlMotor(1, -(normal+angle));
 }
@@ -291,9 +360,11 @@ void ShowDistance() { // 초음파 값 출력함수
   Serial.print("cm");
   Serial.println();
 }
+
+// 장애물 회피 알고리즘
 void Advoid_Obstacle(int pos) {
-  if(distance_F <= DETECTION_DISTANCE) {
-    if(distance_L <= SIDE_DETECTION_DISTANCE && distance_R <= SIDE_DETECTION_DISTANCE) {
+  if(distance_F <= DETECTION_DISTANCE) { // 정면 초음파센서 15cm 이내 장애물 감지 되었을때
+    if(distance_L <= SIDE_DETECTION_DISTANCE && distance_R <= SIDE_DETECTION_DISTANCE) { // 
       turn_right(normal);
       delay(1800);
     }
@@ -340,7 +411,8 @@ void setup() {
 void loop() {
   cur_time = millis();
   if(cur_time - pre_time >= mtime) { // 50ms 마다 초음파 측정
-    Read_distance();
+    
+    Read_distance();    
     cloudy_bot();
     pre_time = cur_time;
   }
