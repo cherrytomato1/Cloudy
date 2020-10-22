@@ -23,7 +23,8 @@
 유튜브링크
 
 ## 개발
-- 완성 이미지, 어플리케이션
+<img src="https://github.com/cherrytomato1/Cloudy/blob/master/images/%EC%99%84%EC%84%B1.PNG" />
+<img src="https://github.com/cherrytomato1/Cloudy/blob/master/images/%EC%96%B4%ED%94%8C.bmp" />
 
 ### 하드웨어
 - 라즈베리파이 4
@@ -32,7 +33,7 @@
 - Intel Neural Computing Stick 2
 - 초음파 센서
 - 모터, 모터쉴드, 리튬 배터리, 외관 프레임
-하드웨어 구성(이밎)
+<img src="https://github.com/cherrytomato1/Cloudy/blob/master/images/%EB%B6%80%ED%92%88%EA%B5%AC%EC%84%B1.PNG" />
 
 ### 개발환경
  - 라즈베리파이 - raspbian Buster, python
@@ -54,30 +55,42 @@
 
 ### 동작 흐름, 구성도
 - 동작흐름도
-(동작흐름도)
+<img src="https://github.com/cherrytomato1/Cloudy/blob/master/images/%EB%8F%99%EC%9E%91%20%EA%B5%AC%EC%84%B1.PNG" />
+
 - 기능블록도
-(기능블록도) 
+<img src="https://github.com/cherrytomato1/Cloudy/blob/master/images/%EB%B8%94%EB%A1%9D%EB%8F%84.png" />
+
 - 어플리케이션 순서도
-(순)
+<img src="https://github.com/cherrytomato1/Cloudy/blob/master/images/%EC%88%9C%EC%84%9C%EB%8F%84%20%EC%96%B4%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98.bmp" />
+
 - Pi, Aduino 순서도
-(순)
+<img src="https://github.com/cherrytomato1/Cloudy/blob/master/images/%ED%8C%8C%EC%9D%B4%20%EC%95%84%EB%91%90%EC%9D%B4%EB%85%B8%20%EC%88%9C%EC%84%9C%EB%8F%84.bmp" />
 
 ### 동작 과정
 - 객체인식
-(강아지 네모박스랑 좌표 출력)
+<img src="https://github.com/cherrytomato1/Cloudy/blob/master/images/%EC%96%B4%ED%94%8C.bmp" />
+<img src="https://github.com/cherrytomato1/Cloudy/blob/master/images/%EC%A2%8C%ED%91%9C.bmp" />
+
+
 반려견을 인식하면 인식된 객체의 좌표와 박스 사이즈를 시리얼로 아두이노에게 전송, 아두이노는 박스크기로 거리를 조정하고 좌표로 움직여야할 방향으로 회전 및 기동
 
 - 장애물 회피
-(초음파 각도)
+<img src="https://github.com/cherrytomato1/Cloudy/blob/master/images/%EC%B4%88%EC%9D%8C%ED%8C%8C.png" />
+
+
 초음파 센서의 배치 각도를 조정하여 기동방향의 장애물을 탐지하고 초음파 센서의 수신시간 차이로 거리를 측정하여 회피기동
 
 - 모터 및 바퀴
-(옴니휠 사진)
+<img src="https://github.com/cherrytomato1/Cloudy/blob/master/images/%EC%98%B4%EB%8B%88%ED%9C%A0.bmp" />
+
+
 옴니휠을 사용하여 제약 없이 기동
 
 - 어플리케이션
-(객체인식된 어플화면)
+<img src="https://raw.githubusercontent.com/cherrytomato1/Cloudy/master/images/%EC%96%B4%ED%94%8C.bmp" />
+
+
 어플리케이션의 버튼으로 수동제어, 자동제어를 설정하며 수동제어 시 화살표 버튼으로 기기 기동 
 
 ## 수상
-(상장)
+<img src="https://github.com/cherrytomato1/Cloudy/blob/master/images/%EC%83%81%EC%9E%A5.PNG" />
