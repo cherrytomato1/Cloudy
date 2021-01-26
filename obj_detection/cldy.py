@@ -37,13 +37,13 @@ def recvSock() :
             state=conn.recv(1024)
             state = state[len(state) - 1]-48
             sleep(0.1)
-        #if (state == '7') :
-            #mod = ~mod
+        if (state == '7') :
+            mod = ~mod
             print("recvSock : ")
             print(state)
         except socket.timeout :
             print("timeout")
-        #print(state)
+        print(state)
         
 
 def getDtct() :
@@ -106,26 +106,20 @@ while True:                                                 # 무한 루프
         #print(str(state) + ', ' + str(size) +', '+str(pos))
 
     while True :
-        #state=conn.recv(1024)
-        #if not state :
-        #    print("no data")
-            
-        #if (state == '7') :
-            #mod = ~mod
-        print("recvSock : ")
-        #pos, size = dtct.obj_dtct()
 
-        #pos = int(pos)
-        #size= int(size)
+        pos, size = dtct.obj_dtct()
+
+        pos = int(pos)
+        size= int(size)
         
-        #pos= int(pos) + 500
-        #if(size>200) :
-        #    size = '9'
-        #else :
-        #    size = str(size/20)
-        #    size = size[0]
+        pos= int(pos) + 500
+        if(size>200) :
+            size = '9'
+        else :
+            size = str(size/20)
+            size = size[0]
             
-        #data = '1'+str(size)+str(pos)
+        data = '1'+str(size)+str(pos)
         
     conn.close()                                            # 연결 끊기
     dtct.stop_dtct()
