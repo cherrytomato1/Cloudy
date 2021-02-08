@@ -21,7 +21,7 @@
 - 설문조사 및 시장조사를 통해 필요성 확인
 
 ## 시연 영상
---https://www.youtube.com/watch?v=ObmEl-eeEP8
+--https://www.youtube.com/watch?v=ObmEl-eeEP8aa
 
 ## 개발
 <img src="https://github.com/cherrytomato1/Cloudy/blob/master/images/%EC%99%84%EC%84%B1.PNG" />
